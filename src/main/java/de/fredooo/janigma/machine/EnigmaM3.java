@@ -138,7 +138,7 @@ public class EnigmaM3 extends Enigma {
 	 */
 	public static EnigmaM3 getEnigmaM3() {
 		if (enigma == null) {
-			enigma = new EnigmaM3(Rotor.getRotors(), Reflector.getReflectors());
+			enigma = new EnigmaM3(Rotor.createNormalRotors(), Reflector.createNormalReflectors());
 		}
 		return enigma;
 	}

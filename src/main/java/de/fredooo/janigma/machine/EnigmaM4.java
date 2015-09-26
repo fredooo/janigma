@@ -159,7 +159,7 @@ public class EnigmaM4 extends Enigma {
 	 */
 	public static EnigmaM4 getEnigmaM4() {
 		if (enigma == null) {
-			enigma = new EnigmaM4(Rotor.getRotors(), Rotor.getGreekRotors(), Reflector.getThinReflectors());
+			enigma = new EnigmaM4(Rotor.createNormalRotors(), Rotor.createGreekRotors(), Reflector.createThinReflectors());
 		}
 		return enigma;
 	}

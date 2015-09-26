@@ -47,7 +47,7 @@ public class ConsoleUI {
 		
 		// if(answer.equals("1")) {
 			
-		EnigmaM3 enigma = new EnigmaM3(Rotor.getRotors(), Reflector.getReflectors());
+		EnigmaM3 enigma = new EnigmaM3(Rotor.createNormalRotors(), Reflector.createNormalReflectors());
 						
 		// } else if(answer.equals("2")) {
 			
