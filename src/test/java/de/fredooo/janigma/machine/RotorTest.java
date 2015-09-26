@@ -47,7 +47,7 @@ public class RotorTest extends TestCase {
 	 * @return Returns the suite of the tests
 	 */
 	public static Test suite() {
-		return new TestSuite(RotorTest.class);
+		return new TestSuite(ReflectorTest.class);
 	}
 
 	/**

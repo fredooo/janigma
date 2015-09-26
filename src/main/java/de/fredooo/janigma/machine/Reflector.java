@@ -26,7 +26,7 @@ public class Reflector {
 	
 	public static final String[] M4_THIN_REFLECTOR_LABELS = { "A", "B" };
 	
-	private static final int[][] M4_THIN_REFLECTOR_WIRINGS = {
+	public static final int[][] M4_THIN_REFLECTOR_WIRINGS = {
 			{ 4, 13, 10, 16, 0, 20, 24, 22, 9, 8, 2, 14, 15, 1, 11, 12, 3, 23, 25, 21, 5, 19, 7, 17, 6, 18 },
 			{ 17, 3, 14, 1, 9, 13, 19, 10, 21, 4, 7, 12, 11, 5, 2, 22, 25, 0, 23, 6, 24, 8, 15, 18, 20, 16 }
 		};
