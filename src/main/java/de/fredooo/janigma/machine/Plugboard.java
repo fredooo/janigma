@@ -1,5 +1,8 @@
 package de.fredooo.janigma.machine;
 
+import de.fredooo.janigma.symbols.NoSuchSymbolException;
+import de.fredooo.janigma.symbols.Original;
+
 /**
  * Implements the plugboard of an Enigma machine.
  * @author Frederik Dennig
@@ -37,6 +40,10 @@ public class Plugboard {
 	public void addCabel(int firstsymbol, int secondsymbol) {
 		plugs[firstsymbol] = secondsymbol;
 		plugs[secondsymbol] = firstsymbol;
+	}
+	
+	public void addCable(char firstSymbol, char secondSymbol) throws NoSuchSymbolException {
+		addCabel(Original.toInt(firstSymbol), Original.toInt(secondSymbol));
 	}
 	
 	/**

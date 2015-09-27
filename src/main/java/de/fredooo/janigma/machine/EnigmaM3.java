@@ -66,43 +66,9 @@ public class EnigmaM3 extends Enigma {
 	
 	@Override
 	public int use(int input) {
+		actuateSteppingMechanism();
 		
-		// If the machine is used, the rotor position increments.
-		
-		int r2old = middleRotor.getPosition();
-		
-		for (int i = 0; i < rightRotor.getTransferNotches().length; i++) {
-			if (rightRotor.getPosition() == rightRotor.getTransferNotches()[i]) {
-				middleRotor.incrementPosition();
-				break;
-			}
-		}
-		rightRotor.incrementPosition();
-		
-		// The middle rotor increments its position on its own transfer notch, too.
-		
-		if (doubleStep) {
-			middleRotor.incrementPosition();
-			doubleStep = false;
-		}
-		
-		if(middleRotor.getPosition() != r2old) {
-	    	for (int i = 0; i < middleRotor.getTransferNotches().length; i++) {
-	    		if (middleRotor.getPosition() == middleRotor.getTransferNotches()[i]) {
-	    			doubleStep = true;
-	    			break;
-	    		}
-	    	}
-	    	for (int i = 0; i < middleRotor.getTransferNotches().length; i++) {
-	    		if (middleRotor.getPosition() == middleRotor.getTransferNotches()[i] + 1) {
-	    			leftRotor.incrementPosition();
-	    			break;
-	    		}
-	    	}
-	    }
-	    				
-		// Following circuitry to get the ciphered input, as output.
-		
+		// Following circuitry to get the ciphered input
 		input = plugboard.swappedWith(input);
 		
 		input = carryOver(input + rightRotor.getPosition() - rightRotor.getOffset());

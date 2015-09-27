@@ -12,7 +12,7 @@ import junit.textui.TestRunner;
  * Contains the test cases for the Reflector class. 
  * @author Frederik Dennig
  * @since 2015-09-26
- * @version 0.0.1 (last edited 2015-09-26)
+ * @version 0.0.1 (last edited 2015-09-27)
  */
 public class ReflectorTest extends TestCase {
 	

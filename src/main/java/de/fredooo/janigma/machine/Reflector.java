@@ -24,7 +24,7 @@ public class Reflector {
 	 * Enigma M4 thin reflector information
 	 */
 	
-	public static final String[] M4_THIN_REFLECTOR_LABELS = { "A", "B" };
+	public static final String[] M4_THIN_REFLECTOR_LABELS = { "B", "C" };
 	
 	public static final int[][] M4_THIN_REFLECTOR_WIRINGS = {
 			{ 4, 13, 10, 16, 0, 20, 24, 22, 9, 8, 2, 14, 15, 1, 11, 12, 3, 23, 25, 21, 5, 19, 7, 17, 6, 18 },

@@ -92,32 +92,9 @@ public class EnigmaM4 extends Enigma {
 
 	@Override
 	public int use(int input) {
+		actuateSteppingMechanism();
 		
-		// If the machine is used, the rotor position increments.
-		
-		int r2old = middleRotor.getPosition();
-		
-		for (int i = 0; i < rightRotor.getTransferNotches().length; i++) {
-			if (rightRotor.getPosition() == rightRotor.getTransferNotches()[i]) {
-				middleRotor.incrementPosition();
-				break;
-			}
-		}
-		rightRotor.incrementPosition();
-		
-		if (middleRotor.getPosition() != r2old) {
-			for (int i = 0; i < middleRotor.getTransferNotches().length; i++) {
-				if (middleRotor.getPosition() == middleRotor.getTransferNotches()[i] + 1) {
-					leftRotor.incrementPosition();
-					break;
-				}
-			}
-		}
-		
-		// The greek/leftmost rotor is static and doesn't need to be rotated.
-				
-		// Following circuitry to get the ciphered input, as output.
-		
+		// Following circuitry to get the ciphered input
 		input = plugboard.swappedWith(input);
 		
 		input = carryOver(input + rightRotor.getPosition() - rightRotor.getOffset());

@@ -105,6 +105,35 @@ public abstract class Enigma {
 	}
 	
 	/**
+	 * Applies the mechanical changes of one keypress. 
+	 */
+	protected void actuateSteppingMechanism() {
+    	for (int i = 0; i < middleRotor.getTransferNotches().length; i++) {
+    		if (middleRotor.getPosition() == middleRotor.getTransferNotches()[i]) {		
+    			// The middle rotor increments its position on its own transfer notch,
+    			// this is known as "double stepping"
+    			middleRotor.incrementPosition();	
+    	    	// The middle rotor moves the right rotor, if it is on its transfer
+    	    	// notch postion
+    			leftRotor.incrementPosition();
+    			break;
+    		}
+    	}
+    	// The leftmost rotor moves the middle rotor, if it is on its transfer
+    	// notch postion
+		for (int i = 0; i < rightRotor.getTransferNotches().length; i++) {
+			if (rightRotor.getPosition() == rightRotor.getTransferNotches()[i]) {
+				middleRotor.incrementPosition();
+				break;
+			}
+		}
+		
+		// The right-most rotor moves for every character
+		rightRotor.incrementPosition();	
+		// The greek rotor (if available) is static and does not rotate
+	}
+	
+	/**
 	 * This method converts a string to an encrypted output or vice versa. 
 	 * @param input The input to convert.
 	 * @return Returns the encrypted or decrypted input.
