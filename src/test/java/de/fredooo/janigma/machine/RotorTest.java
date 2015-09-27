@@ -13,7 +13,7 @@ import junit.textui.TestRunner;
 /**
  * Contains the test cases for the Rotor class. 
  * @author Frederik Dennig
- * @since 2011-06-01
+ * @since 2015-05-25
  * @version 0.0.1 (last edited 2015-09-26)
  */
 public class RotorTest extends TestCase {
@@ -55,11 +55,11 @@ public class RotorTest extends TestCase {
 	 */
 	public void testM3RotorWirings() {
 		for (int rotorNum = 0; rotorNum < TEST_M3_ROTOR_WIRINGS.length; rotorNum++) {
-			String[] wiringChars = TEST_M3_ROTOR_WIRINGS[rotorNum].split("");
+			String wiringChars = TEST_M3_ROTOR_WIRINGS[rotorNum];
 			int[] wiringNumbers = Rotor.M3_ROTOR_WIRINGS[rotorNum];
-			Assert.assertTrue("M3 rotor wiring of unequal lenght!", wiringChars.length == wiringNumbers.length);
+			Assert.assertTrue("M3 rotor wiring of unequal length!", wiringChars.length() == wiringNumbers.length);
 			for (int pos = 0; pos < wiringNumbers.length; pos++) {
-				char test = wiringChars[pos].charAt(0);
+				char test = wiringChars.charAt(pos);
 				try {
 					Assert.assertTrue("Invalid M3 rotor wiring!", Original.toInt(test) == wiringNumbers[pos]);
 				} catch (NoSuchSymbolException e) {
@@ -74,11 +74,11 @@ public class RotorTest extends TestCase {
 	 */
 	public void testM4GreekRotorWirings() {
 		for (int rotorNum = 0; rotorNum < TEST_M4_GREEK_ROTOR_WIRINGS.length; rotorNum++) {
-			String[] wiringChars = TEST_M4_GREEK_ROTOR_WIRINGS[rotorNum].split("");
+			String wiringChars = TEST_M4_GREEK_ROTOR_WIRINGS[rotorNum];
 			int[] wiringNumbers = Rotor.M4_GREEK_ROTOR_WIRINGS[rotorNum];
-			Assert.assertTrue("M4 greek rotor wiring of unequal lenght!", wiringChars.length == wiringNumbers.length);
+			Assert.assertTrue("M4 greek rotor wiring of unequal length!", wiringChars.length() == wiringNumbers.length);
 			for (int pos = 0; pos < wiringNumbers.length; pos++) {
-				char test = wiringChars[pos].charAt(0);
+				char test = wiringChars.charAt(pos);
 				try {
 					Assert.assertTrue("Invalid M4 greek rotor wiring!", Original.toInt(test) == wiringNumbers[pos]);
 				} catch (NoSuchSymbolException e) {

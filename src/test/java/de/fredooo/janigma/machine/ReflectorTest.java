@@ -11,7 +11,7 @@ import junit.textui.TestRunner;
 /**
  * Contains the test cases for the Reflector class. 
  * @author Frederik Dennig
- * @since 2011-06-01
+ * @since 2015-09-26
  * @version 0.0.1 (last edited 2015-09-26)
  */
 public class ReflectorTest extends TestCase {
@@ -48,11 +48,11 @@ public class ReflectorTest extends TestCase {
 	 */
 	public void testM3ReflecorWirings() {
 		for (int reflectorNum = 0; reflectorNum < TEST_M3_REFLECTOR_WIRINGS.length; reflectorNum++) {
-			String[] wiringChars = TEST_M3_REFLECTOR_WIRINGS[reflectorNum].split("");
+			String wiringChars = TEST_M3_REFLECTOR_WIRINGS[reflectorNum];
 			int[] wiringNumbers = Reflector.M3_REFLECTOR_WIRINGS[reflectorNum];
-			Assert.assertTrue("M3 refelctor wiring of unequal lenght!", wiringChars.length == wiringNumbers.length);
+			Assert.assertTrue("M3 reflector wiring of unequal length!", wiringChars.length() == wiringNumbers.length);
 			for (int pos = 0; pos < wiringNumbers.length; pos++) {
-				char test = wiringChars[pos].charAt(0);
+				char test = wiringChars.charAt(pos);
 				try {
 					Assert.assertTrue("Invalid M3 reflector wiring!", Original.toInt(test) == wiringNumbers[pos]);
 				} catch (NoSuchSymbolException e) {
@@ -67,11 +67,11 @@ public class ReflectorTest extends TestCase {
 	 */
 	public void testM4ThinReflecorWirings() {
 		for (int reflectorNum = 0; reflectorNum < TEST_M4_THIN_REFLECTOR_WIRINGS.length; reflectorNum++) {
-			String[] wiringChars = TEST_M4_THIN_REFLECTOR_WIRINGS[reflectorNum].split("");
+			String wiringChars = TEST_M4_THIN_REFLECTOR_WIRINGS[reflectorNum];
 			int[] wiringNumbers = Reflector.M4_THIN_REFLECTOR_WIRINGS[reflectorNum];
-			Assert.assertTrue("M4 thin refelctor wiring of unequal lenght!", wiringChars.length == wiringNumbers.length);
+			Assert.assertTrue("M4 thin reflector wiring of unequal length!", wiringChars.length() == wiringNumbers.length);
 			for (int pos = 0; pos < wiringNumbers.length; pos++) {
-				char test = wiringChars[pos].charAt(0);
+				char test = wiringChars.charAt(pos);
 				try {
 					Assert.assertTrue("Invalid M4 thin reflector wiring!", Original.toInt(test) == wiringNumbers[pos]);
 				} catch (NoSuchSymbolException e) {

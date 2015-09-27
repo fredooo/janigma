@@ -51,6 +51,16 @@
           <aggregate>true</aggregate>
         </configuration>
       </plugin>
+      <!-- Use Java 7 for the project -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.3</version>
+        <configuration>
+          <source>1.7</source>
+          <target>1.7</target>
+        </configuration>
+      </plugin>
       <!-- Package dependencies into the jar and make it executable -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
