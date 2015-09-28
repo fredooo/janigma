@@ -87,6 +87,25 @@ public class RotorTest extends TestCase {
 			}
 		}
 	}
+	
+	/**
+	 * Tests incrementing, decrementing and setting the rotor position.
+	 */
+	public void testIncrementAndDecrementPosition() {
+		Rotor rotor = Rotor.createNormalRotors()[0];
+		for (int i = 0; i < 52; i++) {
+			Assert.assertEquals("Increment rotor position test failed!", i % 26, rotor.getPosition());
+			rotor.incrementPosition();
+		}
+		rotor.setPostion(1);
+		Assert.assertEquals("Setting rotor position test failed!", 1, rotor.getPosition());
+		rotor.setPostion(0);
+		Assert.assertEquals("Setting rotor position test failed!", 0, rotor.getPosition());
+		for (int i = 52; i > 0; i--) {
+			Assert.assertEquals("Decrement rotor position test failed!", i % 26, rotor.getPosition());
+			rotor.decrementPosition();
+		}
+	}
 
 	/**
 	 * Tests the inverseWiring method.
