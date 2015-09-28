@@ -357,7 +357,7 @@ public class ConfigWindow extends JFrame implements ActionListener {
 		// Plugboard
 		for (int i = 0; i < 26; i++) {
 			((JComboBox<Character>) Array.get(pblist, i)).addItem(UNSELECTED);
-			for (char c : Original.original) {
+			for (char c : Original.ORIGINAL) {
 				((JComboBox<Character>) Array.get(pblist, i)).addItem(c);
 			}
 			((JComboBox<Character>) Array.get(pblist, i)).setSelectedItem(UNSELECTED);

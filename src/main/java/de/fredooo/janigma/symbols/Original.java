@@ -11,11 +11,11 @@ import java.util.Arrays;
  */
 public final class Original {
 
-	public static final char[] original =
+	public static final char[] ORIGINAL =
 		{'A','B','C','D','E','F','G','H','I','J','K','L','M',
 			'N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
 
-	public static final char[] originallc =
+	public static final char[] ORIGINAL_LOWER_CASE =
 		{'a','b','c','d','e','f','g','h','i','j','k','l','m',
 			'n','o','p','q','r','s','t','u','v','w','x','y','z'};
 	
@@ -25,7 +25,7 @@ public final class Original {
 	 * @return The resulting character.
 	 */
 	public static char toChar(int number) {
-		return original[number];
+		return ORIGINAL[number];
 	}
 	
 	/**
@@ -35,9 +35,9 @@ public final class Original {
 	 * @throws NoSuchSymbolException
 	 */
 	public static int toInt(char character) throws NoSuchSymbolException {
-		int i = Arrays.binarySearch(original, character);
+		int i = Arrays.binarySearch(ORIGINAL, character);
 		if (i >= 0) { return i; }
-		i = Arrays.binarySearch(originallc, character);
+		i = Arrays.binarySearch(ORIGINAL_LOWER_CASE, character);
 		if (i >= 0) { return i; }
 		throw new NoSuchSymbolException(character);
 	}
@@ -48,9 +48,9 @@ public final class Original {
 	 * @return The result as boolean.
 	 */
 	public static boolean isValidChar(char character) {
-		int i = Arrays.binarySearch(original, character);
+		int i = Arrays.binarySearch(ORIGINAL, character);
 		if (i >= 0) { return true; }
-		i = Arrays.binarySearch(originallc, character);
+		i = Arrays.binarySearch(ORIGINAL_LOWER_CASE, character);
 		if (i >= 0) { return true; }
 		return false;
 	}

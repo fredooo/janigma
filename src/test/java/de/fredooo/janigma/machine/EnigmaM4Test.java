@@ -33,7 +33,7 @@ public class EnigmaM4Test extends TestCase {
 	}
 	
 	/**
-	 * Test the Enigma M$ machine with an orignal message from WKII.
+	 * Test the Enigma M4 machine with an original message from WKII.
 	 * Source: http://www.cryptomuseum.com/crypto/enigma/msg/p1030681.htm
 	 * @throws NoSuchSymbolException
 	 */
@@ -63,7 +63,7 @@ public class EnigmaM4Test extends TestCase {
 		enigma.getPlugboard().addCable('S', 'Z');
 		enigma.getPlugboard().addCable('V', 'W');
 		String messageKey = enigma.use("QEOB");
-		Assert.assertEquals("CDSZ", messageKey);
+		Assert.assertEquals("Decrypted key does not match expected!", "CDSZ", messageKey);
 		enigma.getGreekRotor().setPostion(Original.toInt('C'));
 		enigma.getLeftRotor().setPostion(Original.toInt('D'));
 		enigma.getMiddleRotor().setPostion(Original.toInt('S'));
@@ -84,7 +84,7 @@ public class EnigmaM4Test extends TestCase {
 				"ENWAERTIGENLAGEERGEBENXGEZXREICHSLEITEIKKTULPEKKJBORMANNJXXOBXDXMMMDU" +
 				"RNHFKSTXKOMXADMXUUUBOOIEXKP"; 
 		final String result = enigma.use(message.replaceAll(" ", ""));
-		Assert.assertEquals(expected, result);
+		Assert.assertEquals("Decrypted message does not match expected!", expected, result);
 	}
 	
 	/**
