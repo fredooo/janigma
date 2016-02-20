@@ -4,7 +4,7 @@ package de.fredooo.janigma.machine;
  * Provides the reflectors of the Enigma M3 and M4 machine.
  * @author Frederik Dennig
  * @since 2011-06-01
- * @version 0.2.1 (last revised 2015-09-26)
+ * @version 0.0.2 (last revised 2016-02-20)
  */
 public class Reflector {
 	

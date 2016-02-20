@@ -1,6 +1,5 @@
 package de.fredooo.janigma.ui.graphical;
 
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -24,292 +23,308 @@ import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JTextArea;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 /**
- * Implements the main window.
+ * Provides the main window of the application.
  * @author Frederik Dennig
  * @since 2013-12-13
- * @version 0.1a (last revised 2013-12-15)
+ * @version 0.0.1 (last revised 2016-02-20)
  */
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame implements ActionListener {
 	
-	private Enigma e;
-	private boolean m4active;
+	private static MainWindow instance;
 	
-	private JPanel contentpane;
-	private JLabel mname;
-	private JButton rot1btnu;
-	private JButton rot2btnu;
-	private JButton rot3btnu;
-	private JButton rot4btnu;
-	private JTextField rot1text;
-	private JTextField rot2text;
-	private JTextField rot3text;
-	private JTextField rot4text;
-	private JButton rot1btnd;
-	private JButton rot2btnd;
-	private JButton rot3btnd;
-	private JButton rot4btnd;
-	private JTextArea in;
-	private JTextArea out;
-	private JButton btned;
-	private JButton btnconf;
-	private JMenuItem itemm3;
-	private JMenuItem itemm4;
-	private JMenuItem about;
+	private Enigma enigma;
+	private boolean m4Active;
+	
+	private JLabel machineName;
+	
+	private JButton btnRot1Up;
+	private JButton btnRot2Up;
+	private JButton btnRot3Up;
+	private JButton btnRot4Up;
+	
+	private JTextField rot1Text;
+	private JTextField rot2Text;
+	private JTextField rot3Text;
+	private JTextField rot4Text;
+	
+	private JButton btnRot1Down;
+	private JButton btnRot2Down;
+	private JButton btnRot3Down;
+	private JButton btnRot4Down;
+	
+	private JTextArea inputText;
+	private JTextArea outputText;
+	
+	private JButton btnEnDecrypt;
+	private JButton btnConfig;
+	
+	private JMenuItem m3Item;
+	private JMenuItem m4Item;
+	private JMenuItem aboutItem;
 
 	/**
-	 * Create the frame.
+	 * Creates the main window of the program.
 	 */
-	public MainWindow(boolean m4active) {
+	public MainWindow() {
+		this.enigma = EnigmaM3.instance();
 		
-		this.m4active = m4active;
-		if (m4active) {
-			e = (Enigma) EnigmaM4.getEnigmaM4();
-			
-		} else {
-			e = (Enigma) EnigmaM3.getEnigmaM3();
-		}
+		this.setTitle("Janigma");
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setSize(290, 525);
+		this.setResizable(false);
+		this.setLocationRelativeTo(null);
+		this.setJMenuBar(createMenuBar());
 		
-		setTitle("Janigma");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 295, 551);
-		contentpane = new JPanel();
-		contentpane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentpane);
-		contentpane.setLayout(null);
+		JPanel panel = new JPanel();
+		panel.setLayout(null);
+		panel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		this.setContentPane(panel);
 		
-		JMenuBar menubar = new JMenuBar();
-		menubar.setBounds(0, 0, 294, 21);
-		contentpane.add(menubar);
-		
-		JMenu machine = new JMenu("Machine");
-		menubar.add(machine);
-		
-		itemm3 = new JMenuItem("Enigma M3");
-		machine.add(itemm3);
-		itemm3.addActionListener(this);
-		
-		itemm4 = new JMenuItem("Enigma M4");
-		machine.add(itemm4);
-		itemm4.addActionListener(this);
-		
-		JMenu help = new JMenu("Help");
-		menubar.add(help);
-		
-		about = new JMenuItem("About Janigma");
-		help.add(about);
-		about.addActionListener(this);
-		
-		mname = new JLabel("- Enigma M3 -");
-		mname.setFont(new Font("Tahoma", Font.BOLD, 11));
-		mname.setBounds(10, 32, 130, 14);
-		contentpane.add(mname);
+		machineName = new JLabel("- Enigma M3 -");
+		machineName.setFont(new Font("Tahoma", Font.BOLD, 12));
+		machineName.setBounds(12, 0, 130, 30);
+		panel.add(machineName);
 				
-		rot1btnu = new JButton("\u25B2");
-		rot1btnu.setBounds(7, 57, 63, 23);
-		contentpane.add(rot1btnu);
-		rot1btnu.addActionListener(this);
+		btnRot1Up = new JButton("\u25B2");
+		btnRot1Up.setBounds(7, 30, 63, 23);
+		panel.add(btnRot1Up);
+		btnRot1Up.addActionListener(this);
 		
-		rot2btnu = new JButton("\u25B2");
-		rot2btnu.setBounds(80, 57, 60, 23);
-		contentpane.add(rot2btnu);
-		rot2btnu.addActionListener(this);
+		btnRot2Up = new JButton("\u25B2");
+		btnRot2Up.setBounds(80, 30, 60, 23);
+		panel.add(btnRot2Up);
+		btnRot2Up.addActionListener(this);
 
-		rot3btnu = new JButton("\u25B2");
-		rot3btnu.setBounds(150, 57, 60, 23);
-		contentpane.add(rot3btnu);
-		rot3btnu.addActionListener(this);
+		btnRot3Up = new JButton("\u25B2");
+		btnRot3Up.setBounds(150, 30, 60, 23);
+		panel.add(btnRot3Up);
+		btnRot3Up.addActionListener(this);
 
-		rot4btnu = new JButton("\u25B2");
-		rot4btnu.setBounds(220, 57, 60, 23);
-		contentpane.add(rot4btnu);
-		rot4btnu.addActionListener(this);
+		btnRot4Up = new JButton("\u25B2");
+		btnRot4Up.setBounds(220, 30, 60, 23);
+		panel.add(btnRot4Up);
+		btnRot4Up.addActionListener(this);
 		
-		rot1text = new JTextField();
-		rot1text.setEditable(false);
-		rot1text.setHorizontalAlignment(SwingConstants.CENTER);
-		rot1text.setFont(new Font("Tahoma", Font.BOLD, 40));
-		rot1text.setBounds(10, 91, 60, 60);
-		contentpane.add(rot1text);
-		rot1text.setEditable(false);
+		rot1Text = new JTextField();
+		rot1Text.setEditable(false);
+		rot1Text.setHorizontalAlignment(SwingConstants.CENTER);
+		rot1Text.setFont(new Font("Tahoma", Font.BOLD, 40));
+		rot1Text.setBounds(10, 60, 60, 60);
+		panel.add(rot1Text);
+		rot1Text.setEditable(false);
 		
-		rot2text = new JTextField();
-		rot2text.setEditable(false);
-		rot2text.setFont(new Font("Tahoma", Font.BOLD, 40));
-		rot2text.setHorizontalAlignment(SwingConstants.CENTER);
-		rot2text.setBounds(80, 91, 60, 60);
-		contentpane.add(rot2text);
+		rot2Text = new JTextField();
+		rot2Text.setEditable(false);
+		rot2Text.setFont(new Font("Tahoma", Font.BOLD, 40));
+		rot2Text.setHorizontalAlignment(SwingConstants.CENTER);
+		rot2Text.setBounds(80, 60, 60, 60);
+		panel.add(rot2Text);
 		
-		rot3text = new JTextField();
-		rot3text.setEditable(false);
-		rot3text.setFont(new Font("Tahoma", Font.BOLD, 40));
-		rot3text.setHorizontalAlignment(SwingConstants.CENTER);
-		rot3text.setBounds(150, 91, 60, 60);
-		contentpane.add(rot3text);
+		rot3Text = new JTextField();
+		rot3Text.setEditable(false);
+		rot3Text.setFont(new Font("Tahoma", Font.BOLD, 40));
+		rot3Text.setHorizontalAlignment(SwingConstants.CENTER);
+		rot3Text.setBounds(150, 60, 60, 60);
+		panel.add(rot3Text);
 		
-		rot4text = new JTextField();
-		rot4text.setEditable(false);
-		rot4text.setFont(new Font("Tahoma", Font.BOLD, 40));
-		rot4text.setHorizontalAlignment(SwingConstants.CENTER);
-		rot4text.setBounds(220, 91, 60, 60);
-		contentpane.add(rot4text);
+		rot4Text = new JTextField();
+		rot4Text.setEditable(false);
+		rot4Text.setFont(new Font("Tahoma", Font.BOLD, 40));
+		rot4Text.setHorizontalAlignment(SwingConstants.CENTER);
+		rot4Text.setBounds(220, 60, 60, 60);
+		panel.add(rot4Text);
 				
-		rot1btnd = new JButton("\u25BC");
-		rot1btnd.setBounds(10, 162, 60, 23);
-		contentpane.add(rot1btnd);
-		rot1btnd.addActionListener(this);
+		btnRot1Down = new JButton("\u25BC");
+		btnRot1Down.setBounds(10, 128, 60, 23);
+		panel.add(btnRot1Down);
+		btnRot1Down.addActionListener(this);
 
-		rot2btnd = new JButton("\u25BC");
-		rot2btnd.setBounds(80, 162, 60, 23);
-		contentpane.add(rot2btnd);
-		rot2btnd.addActionListener(this);
+		btnRot2Down = new JButton("\u25BC");
+		btnRot2Down.setBounds(80, 128, 60, 23);
+		panel.add(btnRot2Down);
+		btnRot2Down.addActionListener(this);
 
-		rot3btnd = new JButton("\u25BC");
-		rot3btnd.setBounds(150, 162, 60, 23);
-		contentpane.add(rot3btnd);
-		rot3btnd.addActionListener(this);
+		btnRot3Down = new JButton("\u25BC");
+		btnRot3Down.setBounds(150, 128, 60, 23);
+		panel.add(btnRot3Down);
+		btnRot3Down.addActionListener(this);
 		
-		rot4btnd = new JButton("\u25BC");
-		rot4btnd.setBounds(220, 162, 60, 23);
-		contentpane.add(rot4btnd);
-		rot4btnd.addActionListener(this);
+		btnRot4Down = new JButton("\u25BC");
+		btnRot4Down.setBounds(220, 128, 60, 23);
+		panel.add(btnRot4Down);
+		btnRot4Down.addActionListener(this);
 		
 		JLabel input = new JLabel("Input:");
-		input.setBounds(10, 196, 46, 14);
-		contentpane.add(input);
+		input.setBounds(12, 168, 46, 14);
+		panel.add(input);
 		
-		in = new JTextArea();
-		in.setLineWrap(true);
-		in.setBounds(10, 216, 270, 110);
-		contentpane.add(in);
+		inputText = new JTextArea();
+		inputText.setLineWrap(true);
+		inputText.setBounds(10, 188, 270, 110);
+		panel.add(inputText);
 		
 		JLabel output = new JLabel("Output:");
-		output.setBounds(10, 337, 46, 14);
-		contentpane.add(output);
+		output.setBounds(12, 308, 46, 14);
+		panel.add(output);
 		
-		out = new JTextArea();
-		out.setEditable(false);
-		out.setLineWrap(true);
-		out.setBounds(10, 357, 270, 110);
-		contentpane.add(out);
+		outputText = new JTextArea();
+		outputText.setEditable(false);
+		outputText.setLineWrap(true);
+		outputText.setBounds(10, 328, 270, 110);
+		panel.add(outputText);
 		
-		btned = new JButton("En-/Decrypt");
-		btned.setBounds(10, 478, 100, 23);
-		contentpane.add(btned);
-		btned.addActionListener(this);
+		btnEnDecrypt = new JButton("En-/Decrypt");
+		btnEnDecrypt.setBounds(10, 448, 100, 23);
+		panel.add(btnEnDecrypt);
+		btnEnDecrypt.addActionListener(this);
 		
-		btnconf = new JButton("Configuration");
-		btnconf.setBounds(155, 478, 120, 23);
-		contentpane.add(btnconf);
-		btnconf.addActionListener(this);
+		btnConfig = new JButton("Configuration");
+		btnConfig.setBounds(160, 448, 120, 23);
+		panel.add(btnConfig);
+		btnConfig.addActionListener(this);
 			
 		updateRotors();
 	}
 	
+	/**
+	 * Returns the MainWindow singleton.
+	 * @return the single instance of the MainWindow class
+	 */
+	public static MainWindow instance() {
+		if (instance == null) {
+			instance = new MainWindow();
+		}
+		return instance;
+	}
+	
+	/**
+	 * Updates the rotor positions.
+	 */
 	private void updateRotors() {
-		if (m4active) {
-			rot1text.setText(String.valueOf(Original.toChar(((EnigmaM4) e).getGreekRotor().getPosition())));
-			rot1btnu.setEnabled(true);
-			rot1btnd.setEnabled(true);
-			mname.setText("- Enigma M4 -");
+		if (m4Active) {
+			rot1Text.setText(String.valueOf(Original.toChar(((EnigmaM4) enigma).getGreekRotor().getPosition())));
+			btnRot1Up.setEnabled(true);
+			btnRot1Down.setEnabled(true);
+			machineName.setText("- Enigma M4 -");
 
 		} else {
-			rot1text.setText("");
-			rot1btnu.setEnabled(false);
-			rot1btnd.setEnabled(false);
+			rot1Text.setText("");
+			btnRot1Up.setEnabled(false);
+			btnRot1Down.setEnabled(false);
 
 		}
-		rot2text.setText(String.valueOf(Original.toChar(e.getLeftRotor().getPosition())));
-		rot3text.setText(String.valueOf(Original.toChar(e.getMiddleRotor().getPosition())));
-		rot4text.setText(String.valueOf(Original.toChar(e.getRightRotor().getPosition())));
+		rot2Text.setText(String.valueOf(Original.toChar(enigma.getLeftRotor().getPosition())));
+		rot3Text.setText(String.valueOf(Original.toChar(enigma.getMiddleRotor().getPosition())));
+		rot4Text.setText(String.valueOf(Original.toChar(enigma.getRightRotor().getPosition())));
 	}
 	
 	@Override
-	public void actionPerformed(ActionEvent a) {
-				
+	public void actionPerformed(ActionEvent a) {	
 		// Up buttons
-		if (a.getSource().equals(rot1btnu)) {
-			((EnigmaM4) e).getGreekRotor().incrementPosition();
+		if (a.getSource().equals(btnRot1Up)) {
+			((EnigmaM4) enigma).getGreekRotor().incrementPosition();
 		}
-		else if (a.getSource().equals(rot2btnu)) {
-			e.getLeftRotor().incrementPosition();
+		else if (a.getSource().equals(btnRot2Up)) {
+			enigma.getLeftRotor().incrementPosition();
 		}
-		else if (a.getSource().equals(rot3btnu)) {
-			e.getMiddleRotor().incrementPosition();
+		else if (a.getSource().equals(btnRot3Up)) {
+			enigma.getMiddleRotor().incrementPosition();
 		}
-		else if (a.getSource().equals(rot4btnu)) {
-			e.getRightRotor().incrementPosition();
+		else if (a.getSource().equals(btnRot4Up)) {
+			enigma.getRightRotor().incrementPosition();
 		}
 		
 		// Down buttons
-		else if (a.getSource().equals(rot1btnd)) {
-			((EnigmaM4) e).getGreekRotor().decrementPosition();
+		else if (a.getSource().equals(btnRot1Down)) {
+			((EnigmaM4) enigma).getGreekRotor().decrementPosition();
 		}
-		else if (a.getSource().equals(rot2btnd)) {
-			e.getLeftRotor().decrementPosition();
+		else if (a.getSource().equals(btnRot2Down)) {
+			enigma.getLeftRotor().decrementPosition();
 		}
-		else if (a.getSource().equals(rot3btnd)) {
-			e.getMiddleRotor().decrementPosition();
+		else if (a.getSource().equals(btnRot3Down)) {
+			enigma.getMiddleRotor().decrementPosition();
 		}
-		else if (a.getSource().equals(rot4btnd)) {
-			e.getRightRotor().decrementPosition();
+		else if (a.getSource().equals(btnRot4Down)) {
+			enigma.getRightRotor().decrementPosition();
 		}
 		
 		// En-/Decrypt button
-		else if (a.getSource().equals(btned)) {
-			try {
-				out.setText(e.use(in.getText()));
-			} catch (NoSuchSymbolException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+		else if (a.getSource().equals(btnEnDecrypt)) {
+			final String input = inputText.getText();
+			if (Original.isValidString(input)) {
+				try {
+					outputText.setText(enigma.use(input));
+				} catch (NoSuchSymbolException e) {
+					// This block should never be reached
+					e.printStackTrace();
+				}
+			} else {
+				JOptionPane.showMessageDialog(this,
+						"<html>Invalid character!<br>Please check your input text.<br>Allowed characters are A-Z and a-z.</html>",
+						"Invalid character!", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		
-		// Menubar
-		else if (a.getSource().equals(itemm3)) {
-			e = (Enigma) EnigmaM3.getEnigmaM3();
-			m4active = false;
-			mname.setText("- Enigma M3 -");
-			rot1btnu.setEnabled(false);
-			rot1btnd.setEnabled(false);
+		// Menu bar items
+		else if (a.getSource().equals(m3Item)) {
+			enigma = (Enigma) EnigmaM3.instance();
+			m4Active = false;
+			machineName.setText("- Enigma M3 -");
+			btnRot1Up.setEnabled(false);
+			btnRot1Down.setEnabled(false);
 		}
-		else if (a.getSource().equals(itemm4)) {
-			e = (Enigma) EnigmaM4.getEnigmaM4();
-			m4active = true;
-			mname.setText("- Enigma M4 -");
-			rot1btnu.setEnabled(true);
-			rot1btnd.setEnabled(true);
+		else if (a.getSource().equals(m4Item)) {
+			enigma = (Enigma) EnigmaM4.instance();
+			m4Active = true;
+			machineName.setText("- Enigma M4 -");
+			btnRot1Up.setEnabled(true);
+			btnRot1Down.setEnabled(true);
 		}
-		else if (a.getSource().equals(about)) {
-			EventQueue.invokeLater(new Runnable() {
-				public void run() {
-					try {
-						AboutWindow frame = new AboutWindow();
-						frame.setVisible(true);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			});
+		else if (a.getSource().equals(aboutItem)) {
+			AboutDialog frame = new AboutDialog();
+			frame.setVisible(true);
 		}
 		
 		// Configuration button
-		else if (a.getSource().equals(btnconf)) {
-			EventQueue.invokeLater(new Runnable() {
-				public void run() {
-					try {
-						ConfigWindow frame = new ConfigWindow(m4active);
-						frame.setVisible(true);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			});
-			dispose();
+		else if (a.getSource().equals(btnConfig)) {
+			ConfigDialog frame = new ConfigDialog(m4Active);
+			frame.setVisible(true);
 		}
+		
+		// Always update rotor positions
 		updateRotors();		
+	}
+	
+	/**
+	 * Creates the menu bar.
+	 * @return the created menu bar
+	 */
+	private JMenuBar createMenuBar() {
+		JMenuBar menuBar = new JMenuBar();
+		
+		JMenu machine = new JMenu("Machine");
+		menuBar.add(machine);
+		
+		m3Item = new JMenuItem("Enigma M3");
+		m3Item.addActionListener(this);
+		machine.add(m3Item);
+		
+		m4Item = new JMenuItem("Enigma M4");
+		m4Item.addActionListener(this);
+		machine.add(m4Item);
+		
+		JMenu help = new JMenu("Help");
+		menuBar.add(help);
+		
+		aboutItem = new JMenuItem("About Janigma");
+		aboutItem.addActionListener(this);
+		help.add(aboutItem);
+		
+		return menuBar;
 	}
 	
 }

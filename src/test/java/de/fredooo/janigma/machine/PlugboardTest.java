@@ -35,18 +35,18 @@ public class PlugboardTest extends TestCase {
 	 */
 	public void testAddAndRemoveCable() {
 		Plugboard pb = new Plugboard();
-		pb.addCabel(0, 1);
-		pb.addCabel(2, 3);
+		pb.addCable(0, 1);
+		pb.addCable(2, 3);
 		Assert.assertTrue("Symbol not plugged!", pb.isPlugged(0));
 		Assert.assertTrue("Symbol not plugged!", pb.isPlugged(1));
 		Assert.assertTrue("Symbol not plugged!", pb.isPlugged(2));
 		Assert.assertTrue("Symbol not plugged!", pb.isPlugged(3));
-		pb.removeCabel(0);
+		pb.removeCable(0);
 		Assert.assertFalse("Symbol plugged!", pb.isPlugged(0));
 		Assert.assertFalse("Symbol plugged!", pb.isPlugged(1));
 		Assert.assertTrue("Symbol not plugged!", pb.isPlugged(2));
 		Assert.assertTrue("Symbol not plugged!", pb.isPlugged(3));
-		pb.removeCabel(3);
+		pb.removeCable(3);
 		Assert.assertFalse("Symbol plugged!", pb.isPlugged(0));
 		Assert.assertFalse("Symbol plugged!", pb.isPlugged(1));
 		Assert.assertFalse("Symbol plugged!", pb.isPlugged(2));

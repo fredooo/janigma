@@ -38,7 +38,7 @@ public class EnigmaM4Test extends TestCase {
 	 * @throws NoSuchSymbolException
 	 */
 	public void testOriginalMessage() throws NoSuchSymbolException {
-		EnigmaM4 enigma = EnigmaM4.getEnigmaM4();
+		EnigmaM4 enigma = EnigmaM4.instance();
 		enigma.setThinReflector(enigma.getThinReflectors()[1]);
 		enigma.setGreekRotor(enigma.getGreekRotors()[0]);
 		enigma.setLeftRotor(enigma.getM3Rotors()[4]);

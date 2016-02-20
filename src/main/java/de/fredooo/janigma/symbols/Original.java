@@ -7,7 +7,7 @@ import java.util.Arrays;
  * characters and supports lower and upper case letters.
  * @author Frederik Dennig
  * @since 2011-06-09
- * @version 0.0.3 (last revised 2015-09-23)
+ * @version 0.0.3 (last revised 2016-02-19)
  */
 public final class Original {
 
@@ -20,9 +20,9 @@ public final class Original {
 			'n','o','p','q','r','s','t','u','v','w','x','y','z'};
 	
 	/**
-	 * Transforms an int between 0 and 25 to the corresponding character. 
-	 * @param number An int between 0 and 25.
-	 * @return The resulting character.
+	 * Transforms an integer between 0 and 25 to the corresponding character. 
+	 * @param number an integer between 0 and 25
+	 * @return the resulting character
 	 */
 	public static char toChar(int number) {
 		return ORIGINAL[number];
@@ -30,8 +30,8 @@ public final class Original {
 	
 	/**
 	 * Transforms a simple character (a-z, A-Z) to an int from 0 to 25.
-	 * @param character A given character (a-z, A-Z).
-	 * @return The resulting int (0-25).
+	 * @param character a given character (a-z, A-Z)
+	 * @return the resulting integer (0-25)
 	 * @throws NoSuchSymbolException
 	 */
 	public static int toInt(char character) throws NoSuchSymbolException {
@@ -44,8 +44,8 @@ public final class Original {
 	
 	/**
 	 * Checks if a character is valid for translation.
-	 * @param character The character, you want to validate.
-	 * @return The result as boolean.
+	 * @param character the character to validate
+	 * @return the result as boolean
 	 */
 	public static boolean isValidChar(char character) {
 		int i = Arrays.binarySearch(ORIGINAL, character);
@@ -57,8 +57,8 @@ public final class Original {
 	
 	/**
 	 * Checks if a whole string is valid for translation.
-	 * @param string The string, you want to validate.
-	 * @return The result as boolean.
+	 * @param string the string to validate
+	 * @return the result as boolean
 	 */
 	public static boolean isValidString(String string) {
 		for(int i = 0; i < string.length(); i++) {

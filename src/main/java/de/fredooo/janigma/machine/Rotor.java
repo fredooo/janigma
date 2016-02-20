@@ -4,7 +4,7 @@ package de.fredooo.janigma.machine;
  * Provides the rotors of an Enigma M3 and M4 machine. 
  * @author Frederik Dennig
  * @since 2011-06-01
- * @version 0.2.1 (last edited 2015-09-26)
+ * @version 0.0.2 (last edited 2016-02-20)
  */
 public class Rotor {
 
@@ -60,11 +60,11 @@ public class Rotor {
 	 */
 	private Rotor(String name, int[] wiring, int[] transferNotches) {
 		this.name = name;
-		position = 0;
-		inwardsWiring = wiring;
-		outwardsWiring = inverseWiring(wiring);
+		this.position = 0;
+		this.inwardsWiring = wiring;
+		this.outwardsWiring = inverseWiring(wiring);
 		this.transferNotches = transferNotches;
-		offset = 0;
+		this.offset = 0;
 	}
 
 	/**

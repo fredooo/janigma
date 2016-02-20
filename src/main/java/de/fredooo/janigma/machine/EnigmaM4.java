@@ -4,24 +4,16 @@ package de.fredooo.janigma.machine;
  * Implements an Enigma M4.
  * @author Frederik Dennig
  * @since 2011-06-04
- * @version 0.0.3 (last revised 2015-09-03)
+ * @version 0.0.3 (last revised 2016-02-19)
  */
-public class EnigmaM4 extends Enigma {
- 
-	/*
-	 * Class defines a singleton.
-	 */
+public final class EnigmaM4 extends Enigma {
+ 	
+	private static EnigmaM4 instance;
 	
-	private static EnigmaM4 enigma;
-	
-	/*
-	 * Class variables.
-	 */
-	
-	private Rotor[] greekrotors;
-	private Reflector[] thinreflectors;
-	private Rotor greekrotor; // greek/leftmost rotor
-	private Reflector thinreflector;
+	private Rotor[] greekRotors;
+	private Reflector[] thinReflectors;
+	private Rotor greekRotor; // greek/leftmost rotor
+	private Reflector thinReflector;
 	
 	/**
 	 * Constructs an Enigma M4 machine with all available rotors,
@@ -30,64 +22,75 @@ public class EnigmaM4 extends Enigma {
 	 * rotor III assigned to the right position and rotor β assigned
 	 * to the leftmost (static greek rotor) position. The default
 	 * reflector is reflector B "thin".
-	 * @param m3rotors All available normal rotors.
-	 * @param greekrotors All available greek rotors.
-	 * @param thinreflectors All available thin reflectros.
+	 * @param m3Rotors all available normal rotors
+	 * @param greekRotors all available greek rotors
+	 * @param thinReflectors all available thin reflectors
 	 */
-	private EnigmaM4(Rotor[] m3rotors, Rotor[] greekrotors, Reflector[] thinreflectors) {
-		super(m3rotors);
-		this.greekrotors = greekrotors;
-		this.thinreflectors = thinreflectors;
-		greekrotor = greekrotors[0];
-		thinreflector = thinreflectors[0];
+	private EnigmaM4(Rotor[] m3Rotors, Rotor[] greekRotors, Reflector[] thinReflectors) {
+		super(m3Rotors);
+		this.greekRotors = greekRotors;
+		this.thinReflectors = thinReflectors;
+		this.greekRotor = greekRotors[0];
+		this.thinReflector = thinReflectors[0];
+	}
+	
+	/**
+	 * Returns the EnigmaM4 singleton.
+	 * @return the single instance of the EnigmaM4 class
+	 */
+	public static EnigmaM4 instance() {
+		if (instance == null) {
+			instance = new EnigmaM4(Rotor.createNormalRotors(), Rotor.createGreekRotors(), Reflector.createThinReflectors());
+		}
+		return instance;
 	}
 	
 	/**
 	 * Returns all greek rotors of this Enigma M4 machine.
-	 * @return Returns all greek rotors of this machine.
+	 * @return all greek rotors of this machine
 	 */
 	public Rotor[] getGreekRotors() {
-		return greekrotors;
+		return greekRotors;
 	}
 
 	/**
 	 * Returns all thin reflectors of this Enigma M4 machine.
-	 * @return Returns all reflectors off this machine.
+	 * @return all reflectors off this machine
 	 */
 	public Reflector[] getThinReflectors() {
-		return thinreflectors;
+		return thinReflectors;
 	}
 	
 	/**
 	 * Returns the greek/leftmost rotor of this Enigma machine.
-	 * @return Returns the greek/leftmost Rotor. 
+	 * @return the greek/leftmost rotor
 	 */
 	public Rotor getGreekRotor() {
-		return greekrotor;
+		return greekRotor;
 	}
 	
 	/**
 	 * Sets the greek/leftmost rotor of the this Enigma machine to a given one.
-	 * @param rotor A given greek rotor.
+	 * @param rotor a given greek rotor
 	 */
 	public void setGreekRotor(Rotor rotor) {
-		greekrotor = rotor;
+		greekRotor = rotor;
 	}
 	
 	/**
 	 * Returns the current thin reflector of this Enigma machine.
-	 * @return Returns the right reflector. 
+	 * @return the right reflector.
 	 */
 	public Reflector getThinReflector() {
-		return thinreflector;
+		return thinReflector;
 	}
 
 	/**
 	 * Sets the current thin reflector of the this Enigma machine to a given one.
-	 * @param thinreflector A given thin reflector.
+	 * @param thinReflector a given thin reflector
 	 */
-	public void setThinReflector(Reflector thinreflector) {
-		this.thinreflector = thinreflector;
+	public void setThinReflector(Reflector thinReflector) {
+		this.thinReflector = thinReflector;
 	}
 
 	@Override
@@ -106,16 +109,16 @@ public class EnigmaM4 extends Enigma {
 				+ leftRotor.getPosition() - leftRotor.getOffset());
 		input = leftRotor.getInwardsOutput(input);
 		input = carryOver(input - leftRotor.getPosition() + leftRotor.getOffset()
-				+ greekrotor.getPosition() - greekrotor.getOffset());
-		input = greekrotor.getInwardsOutput(input);
-		input = carryOver(input - greekrotor.getPosition() + greekrotor.getOffset());
+				+ greekRotor.getPosition() - greekRotor.getOffset());
+		input = greekRotor.getInwardsOutput(input);
+		input = carryOver(input - greekRotor.getPosition() + greekRotor.getOffset());
 		
-		input = thinreflector.getOutput(input);
+		input = thinReflector.getOutput(input);
 		
-		input = carryOver(input + greekrotor.getPosition() - greekrotor.getOffset());
-		input = greekrotor.getOutwardsOutput(input);
+		input = carryOver(input + greekRotor.getPosition() - greekRotor.getOffset());
+		input = greekRotor.getOutwardsOutput(input);
 		input = carryOver(input + leftRotor.getPosition() - leftRotor.getOffset()
-				- greekrotor.getPosition() + greekrotor.getOffset());
+				- greekRotor.getPosition() + greekRotor.getOffset());
 		input = leftRotor.getOutwardsOutput(input);
 		input = carryOver(input + middleRotor.getPosition() - middleRotor.getOffset()
 				- leftRotor.getPosition() + leftRotor.getOffset());
@@ -128,17 +131,6 @@ public class EnigmaM4 extends Enigma {
 		input = plugboard.swappedWith(input);
 		
 		return input;		
-	}
-
-	/**
-	 * Returns the EnigmaM4 singleton.
-	 * @return Returns the single instance of EnigmaM4.
-	 */
-	public static EnigmaM4 getEnigmaM4() {
-		if (enigma == null) {
-			enigma = new EnigmaM4(Rotor.createNormalRotors(), Rotor.createGreekRotors(), Reflector.createThinReflectors());
-		}
-		return enigma;
 	}
 	
 }

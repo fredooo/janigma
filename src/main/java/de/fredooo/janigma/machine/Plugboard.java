@@ -7,51 +7,58 @@ import de.fredooo.janigma.symbols.Original;
  * Implements the plugboard of an Enigma machine.
  * @author Frederik Dennig
  * @since 2011-06-01
- * @version 0.0.3 (last revised 2015-09-21)
+ * @version 0.0.3 (last revised 2016-02-20)
  */
 public class Plugboard {
 
 	private int[] plugs;
 	
 	/**
-	 * Constructs a plugboard without any cabels attached.
+	 * Constructs a plugboard without any cables attached.
 	 */
 	public Plugboard() {
-		plugs = new int[26];
-		removeAllCabels();
+		this.plugs = new int[26];
+		removeAllCables();
 	}
 	
 	/**
-	 * Removes all cabels from a plugboard.
+	 * Removes all cables from a plugboard.
 	 */
-	public void removeAllCabels() {
+	public void removeAllCables() {
 		for (int i = 0; i < 26; i++) {
 			plugs[i] = i;
 		}
 	}
 	
 	/**
-	 * Adds a cabel to the plugboard.
-	 * @param firstsymbol The character you want to swap with the
-	 * second character. 
-	 * @param secondsymbol The character you want to swap with the
-	 * first character.
+	 * Adds a cable to the plugboard.
+	 * @param firstSymbol the character to swap with the
+	 * second character as an integer
+	 * @param secondSymbol the character to swap with the
+	 * first character as an integer
 	 */
-	public void addCabel(int firstsymbol, int secondsymbol) {
-		plugs[firstsymbol] = secondsymbol;
-		plugs[secondsymbol] = firstsymbol;
-	}
-	
-	public void addCable(char firstSymbol, char secondSymbol) throws NoSuchSymbolException {
-		addCabel(Original.toInt(firstSymbol), Original.toInt(secondSymbol));
+	public void addCable(int firstSymbol, int secondSymbol) {
+		plugs[firstSymbol] = secondSymbol;
+		plugs[secondSymbol] = firstSymbol;
 	}
 	
 	/**
-	 * Removes the cabel from a character. The corresponding character
-	 * will also be unplugged. 
-	 * @param symbol The character you want to unplug.
+	 * Adds a cable to the plugboard.
+	 * @param firstSymbol the character to swap with the
+	 * second character as a character
+	 * @param secondSymbol the character to swap with the
+	 * first character as a character
 	 */
-	public void removeCabel(int symbol) {
+	public void addCable(char firstSymbol, char secondSymbol) throws NoSuchSymbolException {
+		addCable(Original.toInt(firstSymbol), Original.toInt(secondSymbol));
+	}
+	
+	/**
+	 * Removes the cable from a character. The corresponding character
+	 * will also be unplugged. 
+	 * @param symbol the character to unplug
+	 */
+	public void removeCable(int symbol) {
 		int othersymbol = plugs[symbol];
 		plugs[othersymbol] = othersymbol;
 		plugs[symbol] = symbol;
@@ -59,9 +66,9 @@ public class Plugboard {
 	
 	/**
 	 * Checks if a Character is swapped with another one.
-	 * @param symbol The character you want to check.
-	 * @return Returns true if the character is swapped with another,
-	 * otherwise false.
+	 * @param symbol the character to check
+	 * @return true, if the character is swapped with another,
+	 * otherwise false
 	 */
 	public boolean isPlugged(int symbol) {
 		return (plugs[symbol] != symbol);
@@ -69,9 +76,9 @@ public class Plugboard {
 	
 	/**
 	 * Looks for the corresponding character of a character.
-	 * @param symbol The character from which you want the
-	 * corresponding character.
-	 * @return Returns the corresponding character as an int value.
+	 * @param symbol the character from which to get the
+	 * corresponding character
+	 * @return the corresponding character as an integer value
 	 */
 	public int swappedWith(int symbol) {
 		return plugs[symbol];

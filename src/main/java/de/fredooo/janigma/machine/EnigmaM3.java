@@ -4,21 +4,13 @@ package de.fredooo.janigma.machine;
  * Implements an Enigma M3.
  * @author Frederik Dennig
  * @since 2011-06-01
- * @version 0.0.3 (last revised 2015-09-23)
+ * @version 0.0.3 (last revised 2016-02-19)
  */
-public class EnigmaM3 extends Enigma {
+public final class EnigmaM3 extends Enigma {
 	
-	/*
-	 * Class defines a singleton.
-	 */
+	private static EnigmaM3 instance;
 	
-	private static EnigmaM3 enigma;
-
-	/*
-	 * Class variables
-	 */
-	
-	private Reflector[] m3reflectors;
+	private Reflector[] m3Reflectors;
 	private Reflector reflector;
 	
 	/**
@@ -27,30 +19,37 @@ public class EnigmaM3 extends Enigma {
 	 * left position, rotor II assigned to the middle position and
 	 * rotor III assigned to the right position. The default
 	 * reflector is reflector B.
-	 * @param m3rotors All available rotors for this machine type.
-	 * @param m3reflectors All available rotors for this machine type.
+	 * @param m3Rotors all available rotors for this machine type
+	 * @param m3Reflectors all available rotors for this machine type
 	 */
-	public EnigmaM3(Rotor[] m3rotors, Reflector[] m3reflectors) {
-		super(m3rotors);
-		this.m3reflectors = m3reflectors;
-		reflector = m3reflectors[1];
+	public EnigmaM3(Rotor[] m3Rotors, Reflector[] m3Reflectors) {
+		super(m3Rotors);
+		this.m3Reflectors = m3Reflectors;
+		this.reflector = m3Reflectors[1];
 	}
 	
-	public Rotor[] getM3Rotors() {
-		return m3Rotors;
+	/**
+	 * Returns the EnigmaM3 singleton.
+	 * @return the single instance of the EnigmaM3 class
+	 */
+	public static EnigmaM3 instance() {
+		if (instance == null) {
+			instance = new EnigmaM3(Rotor.createNormalRotors(), Reflector.createNormalReflectors());
+		}
+		return instance;
 	}
 	
 	/**
 	 * Returns all reflectors of this Enigma M3 machine.
-	 * @return Returns all reflectors off this machine.
+	 * @return all reflectors of this machine
 	 */
 	public Reflector[] getM3Reflectors() {
-		return m3reflectors;
+		return m3Reflectors;
 	}
 	
 	/**
 	 * Returns the reflector of this Enigma machine.
-	 * @return Returns the right reflector. 
+	 * @return the right reflector
 	 */
 	public Reflector getReflector() {
 		return reflector;
@@ -58,7 +57,7 @@ public class EnigmaM3 extends Enigma {
 	
 	/**
 	 * Sets the reflector of the this Enigma machine to a given one.
-	 * @param reflector A given reflector.
+	 * @param a given reflector
 	 */
 	public void setReflector(Reflector reflector) {
 		this.reflector = reflector;
@@ -96,17 +95,6 @@ public class EnigmaM3 extends Enigma {
 		input = plugboard.swappedWith(input);
 		
 		return input;		
-	}
-	
-	/**
-	 * Returns the EnigmaM3 singleton.
-	 * @return Returns the single instance of EnigmaM3.
-	 */
-	public static EnigmaM3 getEnigmaM3() {
-		if (enigma == null) {
-			enigma = new EnigmaM3(Rotor.createNormalRotors(), Reflector.createNormalReflectors());
-		}
-		return enigma;
 	}
 	
 }
