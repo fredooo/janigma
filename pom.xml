@@ -49,6 +49,12 @@
           <maxmem>256m</maxmem>
           <!-- aggregated reports for multi-module projects -->
           <aggregate>true</aggregate>
+          <instrumentation>
+            <excludes>
+              <exclude>de/fredooo/janigma/*.class</exclude>
+              <exclude>de/fredooo/janigma/ui/graphical/*.class</exclude>
+            </excludes>
+          </instrumentation>
         </configuration>
       </plugin>
       <!-- Use Java 7 for the project -->
