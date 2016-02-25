@@ -48,13 +48,13 @@ public class OriginalTest extends TestCase {
 			Original.toInt(' ');
 			Assert.fail("Invalid character accepted!");
 		} catch (NoSuchSymbolException e) {
-			// Nothing to do
+			Assert.assertTrue("Exception has wrong character!", e.getCharacter() == ' ');
 		}
 		try {
 			Original.toInt('-');
 			Assert.fail("Invalid character accepted!");
 		} catch (NoSuchSymbolException e) {
-			// Nothing to do
+			Assert.assertTrue("Exception has wrong character!", e.getCharacter() == '-');
 		}
 	}
 	

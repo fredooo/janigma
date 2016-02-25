@@ -133,4 +133,9 @@ public final class EnigmaM4 extends Enigma {
 		return input;		
 	}
 	
+	@Override
+	public String toString() {
+		return "Enigma M4";
+	}
+	
 }

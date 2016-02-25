@@ -362,13 +362,13 @@ public class ConfigDialog extends JDialog implements ActionListener {
 			}
 			plugboardLists.get(i).setSelectedItem(UNSELECTED);
 		}
-		ArrayList<Integer> noshow = new ArrayList<Integer>();
+		ArrayList<Integer> noShow = new ArrayList<Integer>();
 		int p = 0;
 		for (int i = 0; i < 26; i++) {
-			if(enigma.getPlugboard().isPlugged(i) && !noshow.contains(i)) {
+			if (enigma.getPlugboard().isPlugged(i) && !noShow.contains(i)) {
 				plugboardLists.get(p).setSelectedItem(Original.toChar(i));
 				int s = enigma.getPlugboard().swappedWith(i);
-				noshow.add(s);
+				noShow.add(s);
 				plugboardLists.get(p + 1).setSelectedItem(Original.toChar(s));
 				p += 2;
 			}

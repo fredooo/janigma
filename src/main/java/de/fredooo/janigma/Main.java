@@ -1,6 +1,7 @@
 package de.fredooo.janigma;
 
 import de.fredooo.janigma.symbols.NoSuchSymbolException;
+import de.fredooo.janigma.ui.console.TerminalUI;
 import de.fredooo.janigma.ui.graphical.MainWindow;
 import de.fredooo.janigma.ui.graphical.Theme;
 
@@ -17,9 +18,15 @@ public final class Main {
 	 * @param args not used
 	 */
 	public static void main(String[] args) throws NoSuchSymbolException {
-		Theme.changeLookAndFeel();	
-		MainWindow frame = MainWindow.instance();
-		frame.setVisible(true);
+		if (args.length == 0) {
+			Theme.changeLookAndFeel();	
+			MainWindow frame = MainWindow.instance();
+			frame.setVisible(true);
+		}
+		else if (args[0].equals("-g")) {
+			TerminalUI terminal = new TerminalUI();
+			terminal.run();
+		}
 	}
 	
 	/**
