@@ -53,7 +53,7 @@ public class Rotor {
 	 * Enigma M4 greek rotor information
 	 */
 	
-	public static final String[] M4_ROTOR_LABELS = { "\u03b2", "\u03b3" };
+	public static final String[] M4_GREEK_ROTOR_LABELS = { "\u03b2", "\u03b3" };
 
 	public static final int[][] M4_GREEK_ROTOR_WIRINGS = {
 			{ 11, 4, 24, 9, 21, 2, 13, 8, 23, 22, 15, 1, 16, 12, 3, 17, 19, 0, 10, 25, 6, 5, 20, 7, 14, 18 },
@@ -236,7 +236,7 @@ public class Rotor {
 		if (type < M4_GREEK_BETA) {
 			return new Rotor(type, M3_ROTOR_LABELS[type], M3_ROTOR_WIRINGS[type], M3_ROTOR_TRANSFERNOTCHES[type]);
 		} else {
-			return new Rotor(type, M4_ROTOR_LABELS[type - M4_GREEK_BETA], M4_GREEK_ROTOR_WIRINGS[type - M4_GREEK_BETA], new int[]{ -1 });
+			return new Rotor(type, M4_GREEK_ROTOR_LABELS[type - M4_GREEK_BETA], M4_GREEK_ROTOR_WIRINGS[type - M4_GREEK_BETA], new int[]{ -1 });
 		}
 	}
 	

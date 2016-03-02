@@ -12,7 +12,7 @@ import junit.textui.TestRunner;
  * Contains the test cases for the Reflector class. 
  * @author Frederik Dennig
  * @since 2015-09-26
- * @version 0.0.1 (last edited 2015-09-27)
+ * @version 0.0.3 (last edited 2016-03-02)
  */
 public class ReflectorTest extends TestCase {
 	
@@ -40,7 +40,7 @@ public class ReflectorTest extends TestCase {
 	 * @return Returns the suite of the tests
 	 */
 	public static Test suite() {
-		return new TestSuite(RotorTest.class);
+		return new TestSuite(ReflectorTest.class);
 	}
 	
 	/**
@@ -78,6 +78,23 @@ public class ReflectorTest extends TestCase {
 					Assert.fail("Invalid character tested!");
 				}
 			}
+		}
+	}
+	
+	/**
+	 * Tests the type and name fields.
+	 */
+	public void testTypeAndName() {
+		for (int i = 0; i < Reflector.M3_REFLECTOR_LABELS.length; i++) {
+			Reflector reflector = Reflector.createReflector(i);
+			Assert.assertEquals("Invalid type!", reflector.type(), i);
+			Assert.assertEquals("Invalid name!", reflector.name(), Reflector.M3_REFLECTOR_LABELS[i]);
+		}
+		for (int i = 0; i < Reflector.M4_THIN_REFLECTOR_LABELS.length; i++) {
+			int type = i + Reflector.M4_THIN_B;
+			Reflector reflector = Reflector.createReflector(type);
+			Assert.assertEquals("Invalid type!", reflector.type(), type);
+			Assert.assertEquals("Invalid name!", reflector.name(), Reflector.M4_THIN_REFLECTOR_LABELS[i]);
 		}
 	}
 

@@ -14,7 +14,7 @@ import junit.textui.TestRunner;
  * Contains the test cases for the Rotor class. 
  * @author Frederik Dennig
  * @since 2015-05-25
- * @version 0.0.1 (last edited 2016-03-02)
+ * @version 0.0.2 (last edited 2016-03-02)
  */
 public class RotorTest extends TestCase {
 	
@@ -47,7 +47,7 @@ public class RotorTest extends TestCase {
 	 * @return Returns the suite of the tests
 	 */
 	public static Test suite() {
-		return new TestSuite(ReflectorTest.class);
+		return new TestSuite(RotorTest.class);
 	}
 
 	/**
@@ -114,6 +114,23 @@ public class RotorTest extends TestCase {
 		final int[] in = { 4, 10, 12, 5, 11, 6, 3, 16, 21, 25, 13, 19, 14, 22, 24, 7, 23, 20, 18, 15, 0, 8, 1, 17, 2, 9 };
 		final int[] out = { 20, 22, 24, 6, 0, 3, 5, 15, 21, 25, 1,4, 2, 10, 12, 19, 7, 23, 18, 11, 17, 8, 13, 16, 14, 9 };
 		Assert.assertTrue("The inversion of a wiring failed!", Arrays.equals(Rotor.inverseWiring(in), out));
+	}
+	
+	/**
+	 * Tests the type and name fields.
+	 */
+	public void testTypeAndName() {
+		for (int i = 0; i < Rotor.M3_ROTOR_LABELS.length; i++) {
+			Rotor rotor = Rotor.createRotor(i);
+			Assert.assertEquals("Invalid type!", rotor.type(), i);
+			Assert.assertEquals("Invalid name!", rotor.name(), Rotor.M3_ROTOR_LABELS[i]);
+		}
+		for (int i = 0; i < Rotor.M4_GREEK_ROTOR_LABELS.length; i++) {
+			int type = i + Rotor.M4_GREEK_BETA;
+			Rotor rotor = Rotor.createRotor(type);
+			Assert.assertEquals("Invalid type!", rotor.type(), type);
+			Assert.assertEquals("Invalid name!", rotor.name(), Rotor.M4_GREEK_ROTOR_LABELS[i]);
+		}
 	}
 	
 	/**

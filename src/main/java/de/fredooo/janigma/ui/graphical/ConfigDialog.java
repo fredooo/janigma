@@ -485,8 +485,8 @@ public class ConfigDialog extends JDialog implements ActionListener {
 	
 	private List<ListEntry> buildM4GreekRotorListEntries() {
 		List<ListEntry> result = new ArrayList<ListEntry>();
-		for (int i = 0; i < Rotor.M4_ROTOR_LABELS.length; i++) {
-			result.add(new ListEntry(Rotor.M4_ROTOR_LABELS[i], i + Rotor.M4_GREEK_BETA));
+		for (int i = 0; i < Rotor.M4_GREEK_ROTOR_LABELS.length; i++) {
+			result.add(new ListEntry(Rotor.M4_GREEK_ROTOR_LABELS[i], i + Rotor.M4_GREEK_BETA));
 		}
 		return result;
 	}

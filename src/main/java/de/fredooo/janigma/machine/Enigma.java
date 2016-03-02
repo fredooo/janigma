@@ -137,7 +137,6 @@ public abstract class Enigma {
 		return s;
 	}
 	
-	
 	/**
 	 * This method converts one single char input to an encrypted output or
 	 * vice versa.
@@ -148,22 +147,9 @@ public abstract class Enigma {
 	public final char use(char input) throws NoSuchSymbolException {
 		return Original.toChar(use(Original.toInt(input)));
 	}
-	
-	/**
-	 * This method converts many integers to an encrypted output or vice versa.
-	 * @param input the input to convert
-	 * @return the encrypted or decrypted input
-	 */
-	public final int[] use(int[] input) {
-		int[] output = new int[input.length];
-		for (int i = 0; i < output.length; i++) {
-			output[i] = use(input[i]);
-		}
-		return output;
-	}
 
 	/**
-	 * This method converts one single int input to an encrypted output or
+	 * This method converts one single integer input to an encrypted output or
 	 * vice versa.
 	 * @param input the input to convert
 	 * @return the encrypted or decrypted input

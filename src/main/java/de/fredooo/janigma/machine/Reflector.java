@@ -78,7 +78,6 @@ public class Reflector {
 		return type;
 	}
 	
-	
 	/**
 	 * Returns the name of the reflector. 
 	 * @return the name
