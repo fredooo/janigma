@@ -27,7 +27,7 @@ import javax.swing.SwingConstants;
  * Provides the "Configuration" dialog.
  * @author Frederik Dennig
  * @since 2013-12-14
- * @version 0.0.1 (last revised 2016-02-20)
+ * @version 0.0.2 (last revised 2016-03-02)
  */
 @SuppressWarnings("serial")
 public class ConfigDialog extends JDialog implements ActionListener {
@@ -37,12 +37,12 @@ public class ConfigDialog extends JDialog implements ActionListener {
 	private boolean m4Active;
 	private Enigma enigma;  
 
-	private JComboBox<Reflector> refList;
+	private JComboBox<ListEntry> refList;
 	
-	private JComboBox<Rotor> rot1List;
-	private JComboBox<Rotor> rot2List;
-	private JComboBox<Rotor> rot3List;
-	private JComboBox<Rotor> rot4List;
+	private JComboBox<ListEntry> rot1List;
+	private JComboBox<ListEntry> rot2List;
+	private JComboBox<ListEntry> rot3List;
+	private JComboBox<ListEntry> rot4List;
 	
 	private JComboBox<String> offs1List;
 	private JComboBox<String> offs2List;
@@ -58,12 +58,13 @@ public class ConfigDialog extends JDialog implements ActionListener {
 	/**
 	 * Creates the "Configuration" dialog.
 	 * @param m4Active whether or not the the Enigma M4 is used
+	 * @param enigma the used Enigma machine
 	 */
-	public ConfigDialog(boolean m4Active) {
+	public ConfigDialog(boolean m4Active, Enigma enigma) {
 		super(MainWindow.instance());
 		
 		this.m4Active = m4Active;
-		this.enigma = m4Active ? EnigmaM4.instance() : EnigmaM3.instance();		
+		this.enigma = enigma;		
 		
 		this.setTitle("Configuration");
 		this.setModal(true);
@@ -80,7 +81,7 @@ public class ConfigDialog extends JDialog implements ActionListener {
 		reflector.setBounds(10, 11, 62, 14);
 		panel.add(reflector);
 		
-		refList = new JComboBox<Reflector>();
+		refList = new JComboBox<ListEntry>();
 		refList.setBounds(74, 8, 51, 20);
 		panel.add(refList);
 		
@@ -88,19 +89,19 @@ public class ConfigDialog extends JDialog implements ActionListener {
 		rotors.setBounds(10, 39, 46, 14);
 		panel.add(rotors);
 
-		rot1List = new JComboBox<Rotor>();
+		rot1List = new JComboBox<ListEntry>();
 		rot1List.setBounds(61, 36, 51, 20);
 		panel.add(rot1List);
 		
-		rot2List = new JComboBox<Rotor>();
+		rot2List = new JComboBox<ListEntry>();
 		rot2List.setBounds(122, 36, 51, 20);
 		panel.add(rot2List);
 		
-		rot3List = new JComboBox<Rotor>();
+		rot3List = new JComboBox<ListEntry>();
 		rot3List.setBounds(183, 36, 51, 20);
 		panel.add(rot3List);
 		
-		rot4List = new JComboBox<Rotor>();
+		rot4List = new JComboBox<ListEntry>();
 		rot4List.setBounds(244, 36, 51, 20);
 		panel.add(rot4List);
 		
@@ -298,40 +299,37 @@ public class ConfigDialog extends JDialog implements ActionListener {
 	private void loadConfig() {		
 		// Refelector
 		if (m4Active) {
-			Reflector[] refs = ((EnigmaM4) enigma).getThinReflectors();
-			for (Reflector r : refs) {
-				 refList.addItem(r);
+			for (ListEntry le : buildM4ThinReflectorListEntries()) {
+				 refList.addItem(le);
 			}
-			refList.setSelectedItem(((EnigmaM4) enigma).getThinReflector());
+			refList.setSelectedIndex(((EnigmaM4) enigma).getThinReflector().type() - Reflector.M4_THIN_B);
 		} else {
-			Reflector[] refs = ((EnigmaM3) enigma).getM3Reflectors();
-			for (Reflector r : refs) {
-				 refList.addItem(r);
+			for (ListEntry le : buildM3ReflectorListEntries()) {
+				 refList.addItem(le);
 			}
-			refList.setSelectedItem(((EnigmaM3) enigma).getReflector());
+			refList.setSelectedIndex(((EnigmaM3) enigma).getReflector().type());
 		}
 		
 		// Greek rotor
 		if (m4Active) {
-			Rotor[] rots = ((EnigmaM4) enigma).getGreekRotors();
-			for (Rotor r : rots) {
-				 rot1List.addItem(r);
+			for (ListEntry le : buildM4GreekRotorListEntries()) {
+				 rot1List.addItem(le);
 			}
-			rot1List.setSelectedItem(((EnigmaM4) enigma).getGreekRotor());
+			rot1List.setSelectedIndex(((EnigmaM4) enigma).getGreekRotor().type() - Rotor.M4_GREEK_BETA);
 		} else {
 			rot1List.setEnabled(false);
 		}
 		
 		// Left, middle and right rotor
-		Rotor[] rots = enigma.getM3Rotors();
-		for (Rotor r : rots) {
-			 rot2List.addItem(r);
-			 rot3List.addItem(r);
-			 rot4List.addItem(r);
+		for (ListEntry le : buildM3RotorListEntries()) {
+			 rot2List.addItem(le);
+			 rot3List.addItem(le);
+			 rot4List.addItem(le);
 		}
-		rot2List.setSelectedItem(enigma.getLeftRotor());
-		rot3List.setSelectedItem(enigma.getMiddleRotor());
-		rot4List.setSelectedItem(enigma.getRightRotor());
+		
+		rot2List.setSelectedIndex(enigma.getLeftRotor().type());
+		rot3List.setSelectedIndex(enigma.getMiddleRotor().type());
+		rot4List.setSelectedIndex(enigma.getRightRotor().type());
 		
 		// Offset
 		if (m4Active) {
@@ -426,14 +424,14 @@ public class ConfigDialog extends JDialog implements ActionListener {
 		if (a.getSource().equals(btnApply)) {
 			if (validateConfig()) {
 				if (m4Active) {
-					((EnigmaM4) enigma).setThinReflector((Reflector) refList.getSelectedItem());
-					((EnigmaM4) enigma).setGreekRotor((Rotor) rot1List.getSelectedItem());
+					((EnigmaM4) enigma).setThinReflector(Reflector.createReflector(((ListEntry) refList.getSelectedItem()).type));
+					((EnigmaM4) enigma).setGreekRotor(Rotor.createRotor(((ListEntry) rot1List.getSelectedItem()).type));
 				} else {
-					((EnigmaM3) enigma).setReflector((Reflector) refList.getSelectedItem());
+					((EnigmaM3) enigma).setReflector(Reflector.createReflector(((ListEntry) refList.getSelectedItem()).type));
 				}
-				enigma.setLeftRotor((Rotor) rot2List.getSelectedItem());
-				enigma.setMiddleRotor((Rotor) rot3List.getSelectedItem());
-				enigma.setRightRotor((Rotor) rot4List.getSelectedItem());
+				enigma.setLeftRotor(Rotor.createRotor(((ListEntry) rot2List.getSelectedItem()).type));
+				enigma.setMiddleRotor(Rotor.createRotor(((ListEntry) rot3List.getSelectedItem()).type));
+				enigma.setRightRotor(Rotor.createRotor(((ListEntry) rot4List.getSelectedItem()).type));
 				
 				if (m4Active) {
 					((EnigmaM4) enigma).getGreekRotor().setOffset(Integer.valueOf((String) offs1List.getSelectedItem() ) - 1);
@@ -451,7 +449,7 @@ public class ConfigDialog extends JDialog implements ActionListener {
 					try {
 						enigma.getPlugboard().addCable(Original.toInt(c1), Original.toInt(c2));
 					} catch (NoSuchSymbolException e) {
-						if (e.getCharacter() != UNSELECTED) {
+						if (e.symbol() != UNSELECTED) {
 							e.printStackTrace();
 						}
 					}
@@ -475,6 +473,55 @@ public class ConfigDialog extends JDialog implements ActionListener {
 		else if (a.getSource().equals(btnReset)) {
 			loadConfig();
 		}
+	}
+	
+	private List<ListEntry> buildM3RotorListEntries() {
+		List<ListEntry> result = new ArrayList<ListEntry>();
+		for (int i = 0; i < Rotor.M3_ROTOR_LABELS.length; i++) {
+			result.add(new ListEntry(Rotor.M3_ROTOR_LABELS[i], i));
+		}
+		return result;
+	}
+	
+	private List<ListEntry> buildM4GreekRotorListEntries() {
+		List<ListEntry> result = new ArrayList<ListEntry>();
+		for (int i = 0; i < Rotor.M4_ROTOR_LABELS.length; i++) {
+			result.add(new ListEntry(Rotor.M4_ROTOR_LABELS[i], i + Rotor.M4_GREEK_BETA));
+		}
+		return result;
+	}
+	
+	private List<ListEntry> buildM3ReflectorListEntries() {
+		List<ListEntry> result = new ArrayList<ListEntry>();
+		for (int i = 0; i < Reflector.M3_REFLECTOR_LABELS.length; i++) {
+			result.add(new ListEntry(Reflector.M3_REFLECTOR_LABELS[i], i));
+		}
+		return result;
+	}
+		
+	private List<ListEntry> buildM4ThinReflectorListEntries() {
+		List<ListEntry> result = new ArrayList<ListEntry>();
+		for (int i = 0; i < Reflector.M4_THIN_REFLECTOR_LABELS.length; i++) {
+			result.add(new ListEntry(Reflector.M4_THIN_REFLECTOR_LABELS[i], i + Reflector.M4_THIN_B));
+		}
+		return result;
+	}
+	
+	private class ListEntry {
+		
+		private final String name;
+		private final int type;
+		
+		public ListEntry(String name, int type) {
+			this.name = name;
+			this.type = type;
+		}
+		
+		@Override
+		public String toString() {
+			return name;
+		}
+		
 	}
 	
 }

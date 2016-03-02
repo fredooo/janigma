@@ -1,13 +1,33 @@
 package de.fredooo.janigma.machine;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Provides the rotors of an Enigma M3 and M4 machine. 
  * @author Frederik Dennig
  * @since 2011-06-01
- * @version 0.0.2 (last edited 2016-02-20)
+ * @version 0.0.3 (last edited 2016-03-02)
  */
 public class Rotor {
+	
+	/*
+	 * All available rotor types
+	 */
 
+	public static final int M3_I = 0;
+	public static final int M3_II = 1;
+	public static final int M3_III = 2;
+	public static final int M3_IV = 3;
+	public static final int M3_V = 4;
+	public static final int M3_VI = 5;
+	public static final int M3_VII = 6;
+	public static final int M3_VIII = 7;
+
+	public static final int M4_GREEK_BETA = 8;
+	public static final int M4_GREEK_GAMMA = 9;
+	
 	/*
 	 * Enigma M3 rotor information
 	 */
@@ -43,22 +63,38 @@ public class Rotor {
 	/*
 	 * Class variables
 	 */
+	
+	@JsonProperty("type")
+	private final int type;
 
-	private String name;
+	@JsonIgnore
+	private final String name;
+	
+	@JsonProperty("position")
 	private int position;
-	private int[] inwardsWiring;
-	private int[] outwardsWiring;
-	private int[] transferNotches;
+	
+	@JsonIgnore
+	private final int[] inwardsWiring;
+	
+	@JsonIgnore
+	private final int[] outwardsWiring;
+	
+	@JsonIgnore
+	private final int[] transferNotches;
+	
+	@JsonProperty("offset")
 	private int offset;
 
 	/**
-	 * Constructs a rotor with a given name, a given wiring and given transfer
+	 * Constructs a rotor with a given type, name, wiring and transfer
 	 * notches, initialized at position 0 with offset 0.
+	 * @param type the type of the rotor
 	 * @param name a given name
 	 * @param wiring a given wiring
 	 * @param transferNotches the given transfer notches
 	 */
-	private Rotor(String name, int[] wiring, int[] transferNotches) {
+	private Rotor(int type, String name, int[] wiring, int[] transferNotches) {
+		this.type = type;
 		this.name = name;
 		this.position = 0;
 		this.inwardsWiring = wiring;
@@ -67,6 +103,22 @@ public class Rotor {
 		this.offset = 0;
 	}
 
+	/**
+	 * Returns the type of the rotor.
+	 * @return the type
+	 */
+	public int type() {
+		return type;
+	}
+	
+	/**
+	 * Returns the name of the rotor
+	 * @return the name
+	 */
+	public String name() {
+		return name;
+	}
+	
 	/**
 	 * Returns the current position of a rotor.
 	 * @return the position of the rotor
@@ -111,7 +163,7 @@ public class Rotor {
 	 * @param input the input character as a number
 	 * @return the corresponding output.
 	 */
-	public int getInwardsOutput(int input) {
+	public int inwardsOutputOf(int input) {
 		return inwardsWiring[input];
 	}
 
@@ -121,7 +173,7 @@ public class Rotor {
 	 * @param input the input character as a number
 	 * @return the corresponding output
 	 */
-	public int getOutwardsOutput(int input) {
+	public int outwardsOutputOf(int input) {
 		return outwardsWiring[input];
 	}
 
@@ -171,30 +223,39 @@ public class Rotor {
 		}
 		return invertedWiring;
 	}
-
+	
 	/**
-	 * Builds all 8 normal rotors for the Enigma M3 machine.
-	 * @return the built rotors
+	 * Creates a rotor of a given type.
+	 * @param type the type of the rotor to create
+	 * @return a new rotor of the given type
 	 */
-	public static Rotor[] createNormalRotors() {
-		Rotor[] rotors = new Rotor[M3_ROTOR_LABELS.length];
-		for (int i = 0; i < rotors.length ; i++) {
-			rotors[i] = new Rotor(M3_ROTOR_LABELS[i], M3_ROTOR_WIRINGS[i],  M3_ROTOR_TRANSFERNOTCHES[i]);
+	public static Rotor createRotor(int type) {
+		if (type < M3_I || type > M4_GREEK_GAMMA) {
+			throw new IllegalArgumentException("No such rotor!");
 		}
-		return rotors;
+		if (type < M4_GREEK_BETA) {
+			return new Rotor(type, M3_ROTOR_LABELS[type], M3_ROTOR_WIRINGS[type], M3_ROTOR_TRANSFERNOTCHES[type]);
+		} else {
+			return new Rotor(type, M4_ROTOR_LABELS[type - M4_GREEK_BETA], M4_GREEK_ROTOR_WIRINGS[type - M4_GREEK_BETA], new int[]{ -1 });
+		}
 	}
-
+	
 	/**
-	 * Builds beta and gamma rotor for the Enigma M4 machine.
-	 * @return the greek rotors
+	 * Creates a rotor with a given type, position and offset.
+	 * @param type the type of the rotor to create
+	 * @param postion the position of the rotor
+	 * @param offset the offset of the rotor
+	 * @return the new rotor with the given configuration
 	 */
-	public static Rotor[] createGreekRotors() {
-		Rotor[]  greekRotors = new Rotor[M4_ROTOR_LABELS.length];
-		for (int i = 0; i < greekRotors.length; i++) {
-			// Greek rotors are not moved by their neighbor, hence transfer notch set to -1
-			greekRotors[i] = new Rotor(M4_ROTOR_LABELS[i], M4_GREEK_ROTOR_WIRINGS[i], new int[]{ -1 });
-		}
-		return greekRotors;
+	@JsonCreator
+	public static Rotor createRotor(
+			@JsonProperty("type") int type,
+			@JsonProperty("position") int postion,
+			@JsonProperty("offset") int offset) {
+		Rotor rotor = createRotor(type);
+		rotor.position = postion;
+		rotor.offset = offset;
+		return rotor;
 	}
 
 }

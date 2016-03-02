@@ -14,7 +14,7 @@ import junit.textui.TestRunner;
  * Contains the test cases for the Rotor class. 
  * @author Frederik Dennig
  * @since 2015-05-25
- * @version 0.0.1 (last edited 2015-09-27)
+ * @version 0.0.1 (last edited 2016-03-02)
  */
 public class RotorTest extends TestCase {
 	
@@ -92,7 +92,7 @@ public class RotorTest extends TestCase {
 	 * Tests incrementing, decrementing and setting the rotor position.
 	 */
 	public void testIncrementAndDecrementPosition() {
-		Rotor rotor = Rotor.createNormalRotors()[0];
+		Rotor rotor = Rotor.createRotor(Rotor.M3_I);
 		for (int i = 0; i < 52; i++) {
 			Assert.assertEquals("Increment rotor position test failed!", i % 26, rotor.getPosition());
 			rotor.incrementPosition();

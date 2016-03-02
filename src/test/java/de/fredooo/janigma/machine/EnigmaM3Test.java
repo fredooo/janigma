@@ -12,7 +12,7 @@ import junit.textui.TestRunner;
  * Contains the test cases for the EnigmaM3 class. 
  * @author Frederik Dennig
  * @since 2015-05-28
- * @version 0.0.1 (last edited 2015-09-28)
+ * @version 0.0.1 (last edited 2016-03-02)
  */
 public class EnigmaM3Test extends TestCase {
 
@@ -38,11 +38,13 @@ public class EnigmaM3Test extends TestCase {
 	 * @throws NoSuchSymbolException 
 	 */
 	public void testOriginalMessage() throws NoSuchSymbolException {
-		EnigmaM3 enigma = EnigmaM3.instance();
-		enigma.setReflector(enigma.getM3Reflectors()[0]);
-		enigma.setLeftRotor(enigma.getM3Rotors()[1]);
-		enigma.setMiddleRotor(enigma.getM3Rotors()[0]);
-		enigma.setRightRotor(enigma.getM3Rotors()[2]);
+		EnigmaM3 enigma = new EnigmaM3();
+		Assert.assertEquals("Wrong Enigma machine!", "Enigma M3", enigma.toString());
+		enigma.setReflector(Reflector.createReflector(Reflector.M3_A));
+		Assert.assertEquals("Wrong reflector in machine configuration!", "A", enigma.getReflector().toString());
+		enigma.setLeftRotor(Rotor.createRotor(Rotor.M3_II));
+		enigma.setMiddleRotor(Rotor.createRotor(Rotor.M3_I));
+		enigma.setRightRotor(Rotor.createRotor(Rotor.M3_III));
 		enigma.getLeftRotor().setOffset(23);
 		enigma.getMiddleRotor().setOffset(12);
 		enigma.getRightRotor().setOffset(21);

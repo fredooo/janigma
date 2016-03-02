@@ -1,5 +1,8 @@
 package de.fredooo.janigma.machine;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import de.fredooo.janigma.symbols.NoSuchSymbolException;
 import de.fredooo.janigma.symbols.Original;
 
@@ -7,45 +10,33 @@ import de.fredooo.janigma.symbols.Original;
  * Implements the common functionalities of an Enigma M3 and M4.
  * @author Frederik Dennig
  * @since 2011-11-18
- * @version 0.0.3 (last revised 2016-02-19)
+ * @version 0.0.4 (last revised 2016-03-02)
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public abstract class Enigma {
 	
-	protected Rotor[] m3Rotors;
+	@JsonProperty("rightRotor")
 	protected Rotor rightRotor;
+	
+	@JsonProperty("middleRotor")
 	protected Rotor middleRotor;
+	
+	@JsonProperty("leftRotor")
 	protected Rotor leftRotor;
+	
+	@JsonProperty("plugboard")
 	protected Plugboard plugboard;
-	protected boolean doubleStep;
-	
-	/**
-	 * Constructs a basic Enigma object, that only consists of a plugboard.
-	 */
-	private Enigma() {
-		this.plugboard = new Plugboard();
-		this.doubleStep = false;
-	}
-	
+		
 	/**
 	 * Constructs a basic Enigma object, that only consists of a
 	 * plugboard and rotors.
-	 * @param m3Rotors all available rotors for a Enigma machine
 	 * @see EnigmaM3
 	 */
-	protected Enigma(Rotor[] m3Rotors) {
-		this();
-		this.m3Rotors = m3Rotors;
-		this.rightRotor = m3Rotors[2];
-		this.middleRotor = m3Rotors[1];
-		this.leftRotor = m3Rotors[0];
-	}
-
-	/**
-	 * Returns all rotors of this Enigma M3 machine.
-	 * @return the M3 rotors of this machine
-	 */
-	public Rotor[] getM3Rotors() {
-		return m3Rotors;
+	protected Enigma() {
+		this.rightRotor = Rotor.createRotor(Rotor.M3_III);
+		this.middleRotor = Rotor.createRotor(Rotor.M3_II);
+		this.leftRotor = Rotor.createRotor(Rotor.M3_I);
+		this.plugboard = new Plugboard();
 	}
 	
 	/**
@@ -126,8 +117,7 @@ public abstract class Enigma {
 				middleRotor.incrementPosition();
 				break;
 			}
-		}
-		
+		}	
 		// The right-most rotor moves for every character
 		rightRotor.incrementPosition();	
 		// The greek rotor (if available) is static and does not rotate

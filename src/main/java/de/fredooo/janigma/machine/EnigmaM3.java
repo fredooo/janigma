@@ -1,16 +1,16 @@
 package de.fredooo.janigma.machine;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Implements an Enigma M3.
  * @author Frederik Dennig
  * @since 2011-06-01
- * @version 0.0.3 (last revised 2016-02-19)
+ * @version 0.0.4 (last revised 2016-03-02)
  */
 public final class EnigmaM3 extends Enigma {
 	
-	private static EnigmaM3 instance;
-	
-	private Reflector[] m3Reflectors;
+	@JsonProperty("reflector")
 	private Reflector reflector;
 	
 	/**
@@ -19,32 +19,9 @@ public final class EnigmaM3 extends Enigma {
 	 * left position, rotor II assigned to the middle position and
 	 * rotor III assigned to the right position. The default
 	 * reflector is reflector B.
-	 * @param m3Rotors all available rotors for this machine type
-	 * @param m3Reflectors all available rotors for this machine type
 	 */
-	public EnigmaM3(Rotor[] m3Rotors, Reflector[] m3Reflectors) {
-		super(m3Rotors);
-		this.m3Reflectors = m3Reflectors;
-		this.reflector = m3Reflectors[1];
-	}
-	
-	/**
-	 * Returns the EnigmaM3 singleton.
-	 * @return the single instance of the EnigmaM3 class
-	 */
-	public static EnigmaM3 instance() {
-		if (instance == null) {
-			instance = new EnigmaM3(Rotor.createNormalRotors(), Reflector.createNormalReflectors());
-		}
-		return instance;
-	}
-	
-	/**
-	 * Returns all reflectors of this Enigma M3 machine.
-	 * @return all reflectors of this machine
-	 */
-	public Reflector[] getM3Reflectors() {
-		return m3Reflectors;
+	public EnigmaM3() {
+		this.reflector = Reflector.createReflector(Reflector.M3_B);
 	}
 	
 	/**
@@ -71,25 +48,25 @@ public final class EnigmaM3 extends Enigma {
 		input = plugboard.swappedWith(input);
 		
 		input = carryOver(input + rightRotor.getPosition() - rightRotor.getOffset());
-		input = rightRotor.getInwardsOutput(input); 
+		input = rightRotor.inwardsOutputOf(input); 
 		input = carryOver(input - rightRotor.getPosition() + rightRotor.getOffset()
 				+ middleRotor.getPosition() - middleRotor.getOffset());
-		input = middleRotor.getInwardsOutput(input);
+		input = middleRotor.inwardsOutputOf(input);
 		input = carryOver(input - middleRotor.getPosition() + middleRotor.getOffset()
 				+ leftRotor.getPosition() - leftRotor.getOffset());
-		input = leftRotor.getInwardsOutput(input);
+		input = leftRotor.inwardsOutputOf(input);
 		input = carryOver(input - leftRotor.getPosition() + leftRotor.getOffset());
 		
-		input = reflector.getOutput(input);
+		input = reflector.outputOf(input);
 		
 		input = carryOver(input + leftRotor.getPosition() - leftRotor.getOffset());
-		input = leftRotor.getOutwardsOutput(input);
+		input = leftRotor.outwardsOutputOf(input);
 		input = carryOver(input + middleRotor.getPosition() - middleRotor.getOffset()
 				- leftRotor.getPosition() + leftRotor.getOffset());
-		input = middleRotor.getOutwardsOutput(input);
+		input = middleRotor.outwardsOutputOf(input);
 		input = carryOver(input + rightRotor.getPosition() - rightRotor.getOffset()
 				- middleRotor.getPosition() + middleRotor.getOffset());
-		input = rightRotor.getOutwardsOutput(input);
+		input = rightRotor.outwardsOutputOf(input);
 		input = carryOver(input - rightRotor.getPosition() + rightRotor.getOffset());
 		
 		input = plugboard.swappedWith(input);

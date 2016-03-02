@@ -1,12 +1,27 @@
 package de.fredooo.janigma.machine;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Provides the reflectors of the Enigma M3 and M4 machine.
  * @author Frederik Dennig
  * @since 2011-06-01
- * @version 0.0.2 (last revised 2016-02-20)
+ * @version 0.0.3 (last revised 2016-03-02)
  */
 public class Reflector {
+	
+	/*
+	 * All available reflector types
+	 */
+	
+	public static final int M3_A = 0;
+	public static final int M3_B = 1;
+	public static final int M3_C = 2;
+	
+	public static final int M4_THIN_B = 3;
+	public static final int M4_THIN_C = 4;
 	
 	/*
 	 * Enigma M3 reflector information
@@ -35,16 +50,41 @@ public class Reflector {
 	 * Class variables
 	 */
 
-	private String name;
-	private int[] wiring;
+	@JsonProperty("type")
+	private final int type;
+	
+	@JsonIgnore
+	private final String name;
+	
+	@JsonIgnore
+	private final int[] wiring;
 	
 	/**
-	 * Constructs a reflector from a given wiring.
+	 * Constructs a reflector with a given type, name and wiring.
+	 * @param type the type of the reflector
 	 * @param wiring a given wiring
 	 */
-	protected Reflector(String name, int[] wiring) {
+	private Reflector(int type, String name, int[] wiring) {
+		this.type = type;
 		this.name = name;
 		this.wiring = wiring;
+	}
+	
+	/**
+	 * Returns the type of the reflector.
+	 * @return the type
+	 */
+	public int type() {
+		return type;
+	}
+	
+	
+	/**
+	 * Returns the name of the reflector. 
+	 * @return the name
+	 */
+	public String name() {
+		return name;
 	}
 	
 	/**
@@ -52,7 +92,7 @@ public class Reflector {
 	 * @param input a character as a number
 	 * @return the corresponding character as a number
 	 */
-	public int getOutput(int input) {
+	public int outputOf(int input) {
 		return wiring[input]; 
 	}
 	
@@ -62,27 +102,20 @@ public class Reflector {
 	}
 	
 	/**
-	 * Builds all reflectors for the Enigma M3 machine.
-	 * @return the built reflectors
+	 * Creates a reflector of a given type.
+	 * @param type the type of the reflector to create
+	 * @return a new reflector of the given ID
 	 */
-	public static Reflector[] createNormalReflectors() {
-		Reflector[] reflectors = new Reflector[M3_REFLECTOR_LABELS.length];
-		for (int i = 0; i < reflectors.length; i++) {
-			reflectors[i] = new Reflector(M3_REFLECTOR_LABELS[i], M3_REFLECTOR_WIRINGS[i]);
+	@JsonCreator
+	public static Reflector createReflector(@JsonProperty("type") int type) {
+		if (type < M3_A || type > M4_THIN_C) {
+			throw new IllegalArgumentException("No such reflector!");
 		}
-		return reflectors;
-	}
-	
-	/**
-	 * Builds all thin reflectors for the Enigma M4 machine.
-	 * @return the built thin reflectors
-	 */
-	public static Reflector[] createThinReflectors() {
-		Reflector[] thinReflectors = new Reflector[M4_THIN_REFLECTOR_LABELS.length];
-		for (int i = 0; i < thinReflectors.length; i++) {
-			thinReflectors[i] = new Reflector(M4_THIN_REFLECTOR_LABELS[i], M4_THIN_REFLECTOR_WIRINGS[i]);
+		if (type < M4_THIN_B) {
+			return new Reflector(type, M3_REFLECTOR_LABELS[type], M3_REFLECTOR_WIRINGS[type]);
+		} else {
+			return new Reflector(type, M4_THIN_REFLECTOR_LABELS[type - M4_THIN_B], M4_THIN_REFLECTOR_WIRINGS[type - M4_THIN_B]);
 		}
-		return thinReflectors;
 	}
 	
 }

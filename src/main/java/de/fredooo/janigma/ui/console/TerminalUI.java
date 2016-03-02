@@ -43,9 +43,11 @@ public class TerminalUI {
 	 * Create the TerminalUI object.
 	 */
 	public TerminalUI() {
-		this.enigma = EnigmaM3.instance();
+		this.enigma = new EnigmaM3();
+		
 		Terminal terminal = TerminalFacade.createUnixTerminal();
-		this.screen = TerminalFacade.createScreen();
+		this.screen = TerminalFacade.createScreen(terminal);
+		
 		this.running = true;
 		this.inputText = "";
 		this.outputText = "";
@@ -221,9 +223,9 @@ public class TerminalUI {
 	private void changeEnigmaMachine() {
 		m4Active = !m4Active;
 		if (m4Active) {
-			enigma = EnigmaM4.instance();
+			enigma = new EnigmaM4();
 		} else {
-			enigma = EnigmaM3.instance();
+			enigma = new EnigmaM3();
 		}
 	}
 	

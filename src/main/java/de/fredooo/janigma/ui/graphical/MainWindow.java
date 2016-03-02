@@ -29,7 +29,7 @@ import javax.swing.JOptionPane;
  * Provides the main window of the application.
  * @author Frederik Dennig
  * @since 2013-12-13
- * @version 0.0.1 (last revised 2016-02-20)
+ * @version 0.0.2 (last revised 2016-03-02)
  */
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame implements ActionListener {
@@ -70,7 +70,7 @@ public class MainWindow extends JFrame implements ActionListener {
 	 * Creates the main window of the program.
 	 */
 	public MainWindow() {
-		this.enigma = EnigmaM3.instance();
+		this.enigma = new EnigmaM3();
 		
 		this.setTitle("Janigma");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -210,12 +210,10 @@ public class MainWindow extends JFrame implements ActionListener {
 			btnRot1Up.setEnabled(true);
 			btnRot1Down.setEnabled(true);
 			machineName.setText("- Enigma M4 -");
-
 		} else {
 			rot1Text.setText("");
 			btnRot1Up.setEnabled(false);
 			btnRot1Down.setEnabled(false);
-
 		}
 		rot2Text.setText(String.valueOf(Original.toChar(enigma.getLeftRotor().getPosition())));
 		rot3Text.setText(String.valueOf(Original.toChar(enigma.getMiddleRotor().getPosition())));
@@ -271,14 +269,14 @@ public class MainWindow extends JFrame implements ActionListener {
 		
 		// Menu bar items
 		else if (a.getSource().equals(m3Item)) {
-			enigma = (Enigma) EnigmaM3.instance();
+			enigma = new EnigmaM3();
 			m4Active = false;
 			machineName.setText("- Enigma M3 -");
 			btnRot1Up.setEnabled(false);
 			btnRot1Down.setEnabled(false);
 		}
 		else if (a.getSource().equals(m4Item)) {
-			enigma = (Enigma) EnigmaM4.instance();
+			enigma = new EnigmaM4();
 			m4Active = true;
 			machineName.setText("- Enigma M4 -");
 			btnRot1Up.setEnabled(true);
@@ -291,7 +289,7 @@ public class MainWindow extends JFrame implements ActionListener {
 		
 		// Configuration button
 		else if (a.getSource().equals(btnConfig)) {
-			ConfigDialog frame = new ConfigDialog(m4Active);
+			ConfigDialog frame = new ConfigDialog(m4Active, enigma);
 			frame.setVisible(true);
 		}
 		

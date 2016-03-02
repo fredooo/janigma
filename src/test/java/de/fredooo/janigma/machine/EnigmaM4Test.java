@@ -12,7 +12,7 @@ import junit.textui.TestRunner;
  * Contains the test cases for the EnigmaM4 class. 
  * @author Frederik Dennig
  * @since 2015-05-27
- * @version 0.0.1 (last edited 2015-09-27)
+ * @version 0.0.1 (last edited 2016-03-02)
  */
 public class EnigmaM4Test extends TestCase {
 	
@@ -38,12 +38,14 @@ public class EnigmaM4Test extends TestCase {
 	 * @throws NoSuchSymbolException
 	 */
 	public void testOriginalMessage() throws NoSuchSymbolException {
-		EnigmaM4 enigma = EnigmaM4.instance();
-		enigma.setThinReflector(enigma.getThinReflectors()[1]);
-		enigma.setGreekRotor(enigma.getGreekRotors()[0]);
-		enigma.setLeftRotor(enigma.getM3Rotors()[4]);
-		enigma.setMiddleRotor(enigma.getM3Rotors()[5]);
-		enigma.setRightRotor(enigma.getM3Rotors()[7]);
+		EnigmaM4 enigma = new EnigmaM4();
+		Assert.assertEquals("Wrong Enigma machine!", "Enigma M4", enigma.toString());
+		enigma.setThinReflector(Reflector.createReflector(Reflector.M4_THIN_C));
+		Assert.assertEquals("Wrong reflector in machine configuration!", "C", enigma.getThinReflector().toString());
+		enigma.setGreekRotor(Rotor.createRotor(Rotor.M4_GREEK_BETA));
+		enigma.setLeftRotor(Rotor.createRotor(Rotor.M3_V));
+		enigma.setMiddleRotor(Rotor.createRotor(Rotor.M3_VI));
+		enigma.setRightRotor(Rotor.createRotor(Rotor.M3_VIII));
 		enigma.getGreekRotor().setOffset(Original.toInt('E'));
 		enigma.getLeftRotor().setOffset(Original.toInt('P'));
 		enigma.getMiddleRotor().setOffset(Original.toInt('E'));

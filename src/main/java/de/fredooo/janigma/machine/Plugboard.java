@@ -1,5 +1,7 @@
 package de.fredooo.janigma.machine;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import de.fredooo.janigma.symbols.NoSuchSymbolException;
 import de.fredooo.janigma.symbols.Original;
 
@@ -7,10 +9,11 @@ import de.fredooo.janigma.symbols.Original;
  * Implements the plugboard of an Enigma machine.
  * @author Frederik Dennig
  * @since 2011-06-01
- * @version 0.0.3 (last revised 2016-02-20)
+ * @version 0.0.4 (last revised 2016-03-02)
  */
 public class Plugboard {
 
+	@JsonProperty("plugs")
 	private int[] plugs;
 	
 	/**
