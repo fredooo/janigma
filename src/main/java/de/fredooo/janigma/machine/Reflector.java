@@ -95,11 +95,6 @@ public class Reflector {
 		return wiring[input]; 
 	}
 	
-	@Override
-	public String toString() {
-		return name;
-	}
-	
 	/**
 	 * Creates a reflector of a given type.
 	 * @param type the type of the reflector to create
@@ -115,6 +110,23 @@ public class Reflector {
 		} else {
 			return new Reflector(type, M4_THIN_REFLECTOR_LABELS[type - M4_THIN_B], M4_THIN_REFLECTOR_WIRINGS[type - M4_THIN_B]);
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return name;
+	}
+	
+	@Override
+	public boolean equals(Object other){
+	    if (other == null) { return false; }
+	    if (other == this) { return true; }
+	    if (!(other instanceof Reflector)) { return false; }
+	    final Reflector otherReflector = (Reflector) other;
+	    if (otherReflector.type != this.type) { return false; }
+	    if (!otherReflector.name.equals(this.name)) { return false; }
+	    // The wiring field is not tested, type and name are enough
+	    return true;
 	}
 	
 }

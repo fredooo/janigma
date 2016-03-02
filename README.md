@@ -7,7 +7,7 @@ A simulator of the Enigma M3 and M4 electro-mechanical rotor cipher machines fro
 
 #### Current task:
 
-Testing and refactoring of all existing components.
+Implementation of a text-based console interface and direct file encyption and decryption.
 
 #### Goals:
 

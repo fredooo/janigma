@@ -34,7 +34,7 @@ public final class EnigmaM3 extends Enigma {
 	
 	/**
 	 * Sets the reflector of the this Enigma machine to a given one.
-	 * @param a given reflector
+	 * @param reflector a given reflector
 	 */
 	public void setReflector(Reflector reflector) {
 		this.reflector = reflector;
@@ -77,6 +77,20 @@ public final class EnigmaM3 extends Enigma {
 	@Override
 	public String toString() {
 		return "Enigma M3";
+	}
+	
+	@Override
+	public boolean equals(Object other){
+	    if (other == null) { return false; }
+	    if (other == this) { return true; }
+	    if (!(other instanceof EnigmaM3)) { return false; }
+	    final EnigmaM3 otherEnigmaM3 = (EnigmaM3) other;
+	    if (!otherEnigmaM3.reflector.equals(this.reflector)) { return false; }
+	    if (!otherEnigmaM3.leftRotor.equals(this.leftRotor)) { return false; }
+	    if (!otherEnigmaM3.middleRotor.equals(this.middleRotor)) { return false; }
+	    if (!otherEnigmaM3.rightRotor.equals(this.rightRotor)) { return false; }
+	    if (!otherEnigmaM3.plugboard.equals(this.plugboard)) { return false; }
+	    return true;
 	}
 	
 }

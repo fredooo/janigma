@@ -106,4 +106,19 @@ public final class EnigmaM4 extends Enigma {
 		return "Enigma M4";
 	}
 	
+	@Override
+	public boolean equals(Object other){
+	    if (other == null) { return false; }
+	    if (other == this) { return true; }
+	    if (!(other instanceof EnigmaM4)) { return false; }
+	    final EnigmaM4 otherEnigmaM4 = (EnigmaM4) other;
+	    if (!otherEnigmaM4.greekRotor.equals(this.greekRotor)) { return false; }
+	    if (!otherEnigmaM4.thinReflector.equals(this.thinReflector)) { return false; }
+	    if (!otherEnigmaM4.leftRotor.equals(this.leftRotor)) { return false; }
+	    if (!otherEnigmaM4.middleRotor.equals(this.middleRotor)) { return false; }
+	    if (!otherEnigmaM4.rightRotor.equals(this.rightRotor)) { return false; }
+	    if (!otherEnigmaM4.plugboard.equals(this.plugboard)) { return false; }
+	    return true;
+	}
+	
 }

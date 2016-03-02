@@ -81,7 +81,7 @@ public abstract class Enigma {
 	
 	/**
 	 * Sets the left rotor of the this Enigma machine to a given one.
-	 * @param a given rotor
+	 * @param rotor a given rotor
 	 */
 	public void setLeftRotor(Rotor rotor) {
 		leftRotor = rotor;
@@ -127,7 +127,7 @@ public abstract class Enigma {
 	 * This method converts a string to an encrypted output or vice versa. 
 	 * @param input the input to convert
 	 * @return the encrypted or decrypted input
-	 * @throws NoSuchSymbolException
+	 * @throws NoSuchSymbolException if a character of the input is not a valid symbol
 	 */
 	public final String use(String input) throws NoSuchSymbolException {
 		String s = "";
@@ -142,7 +142,7 @@ public abstract class Enigma {
 	 * vice versa.
 	 * @param input the input to convert
 	 * @return the encrypted or decrypted input
-	 * @throws NoSuchSymbolException 
+	 * @throws NoSuchSymbolException if the character is not a valid symbol
 	 */
 	public final char use(char input) throws NoSuchSymbolException {
 		return Original.toChar(use(Original.toInt(input)));

@@ -35,7 +35,7 @@ public class EnigmaM3Test extends TestCase {
 	/**
 	 * Test the Enigma M3 machine with an original message from WKII.
 	 * Source: http://cryptocellar.web.cern.ch/cryptocellar/enigma/EMsg1930.html
-	 * @throws NoSuchSymbolException 
+	 * @throws NoSuchSymbolException should never be thrown
 	 */
 	public void testOriginalMessage() throws NoSuchSymbolException {
 		EnigmaM3 enigma = new EnigmaM3();

@@ -32,7 +32,7 @@ public final class Original {
 	 * Transforms a simple character (a-z, A-Z) to an int from 0 to 25.
 	 * @param character a given character (a-z, A-Z)
 	 * @return the resulting integer (0-25)
-	 * @throws NoSuchSymbolException
+	 * @throws NoSuchSymbolException if the given character is not a valid symbol
 	 */
 	public static int toInt(char character) throws NoSuchSymbolException {
 		int i = Arrays.binarySearch(ORIGINAL, character);

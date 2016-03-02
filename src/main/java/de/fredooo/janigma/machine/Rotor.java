@@ -201,14 +201,9 @@ public class Rotor {
 		this.offset = offset;
 	}
 
-	@Override
-	public String toString() {
-		return name;
-	}
-
 	/**
 	 * Inverses a given wiring.
-	 * Example: 3, 4, 0, 1, 2 => 2, 3, 4, 0, 1
+	 * Example: 3, 4, 0, 1, 2 =&gt; 2, 3, 4, 0, 1
 	 * @param wiring the given wiring
 	 * @return the inverted wiring
 	 */
@@ -256,6 +251,26 @@ public class Rotor {
 		rotor.position = postion;
 		rotor.offset = offset;
 		return rotor;
+	}
+	
+	@Override
+	public String toString() {
+		return name;
+	}
+	
+	@Override
+	public boolean equals(Object other){
+	    if (other == null) { return false; }
+	    if (other == this) { return true; }
+	    if (!(other instanceof Rotor)) { return false; }
+	    final Rotor otherRotor = (Rotor) other;
+	    if (otherRotor.type != this.type) { return false; }
+	    if (!otherRotor.name.equals(this.name)) { return false; }
+	    if (otherRotor.position != this.position) { return false; }
+	    if (otherRotor.offset != this.offset) { return false; }
+	    // The inwardsWiring, outwardsWiring and transferNotches fields
+	    // are not tested, type and name are enough
+	    return true;
 	}
 
 }

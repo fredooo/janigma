@@ -17,7 +17,7 @@ public final class Main {
 	 * Starts the program.
 	 * @param args not used
 	 */
-	public static void main(String[] args) throws NoSuchSymbolException {
+	public static void main(String[] args) {
 		if (args.length == 0) {
 			Theme.changeLookAndFeel();	
 			MainWindow frame = MainWindow.instance();

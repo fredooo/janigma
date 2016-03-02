@@ -35,7 +35,7 @@ public class EnigmaM4Test extends TestCase {
 	/**
 	 * Test the Enigma M4 machine with an original message from WKII.
 	 * Source: http://www.cryptomuseum.com/crypto/enigma/msg/p1030681.htm
-	 * @throws NoSuchSymbolException
+	 * @throws NoSuchSymbolException should never be thrown
 	 */
 	public void testOriginalMessage() throws NoSuchSymbolException {
 		EnigmaM4 enigma = new EnigmaM4();

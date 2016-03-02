@@ -1,7 +1,6 @@
 package de.fredooo.janigma.io;
 
 import java.io.File;
-import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -22,26 +21,30 @@ public class FileIo {
 	 * @param enigma the Enigma machine
 	 */
 	public static void saveEnigmaMachine(File file, Enigma enigma) {
+		if (enigma == null) {
+			throw new IllegalArgumentException("Can't serialize null!");
+		}
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.enable(SerializationFeature.INDENT_OUTPUT);
 		try {
 			mapper.writeValue(file, enigma);
-		} catch (IOException e) {
-			System.err.println(e.getMessage());
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 		}
 	}
 	
 	/**
 	 * Loads an Enigma machine from a given file.
 	 * @param file the file to load from
+	 * @return the loaded Enigma machine
 	 */
 	public static Enigma loadEnigmaMachine(File file) {
 		Enigma enigma = null;
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			enigma = mapper.readValue(file, Enigma.class);
-		} catch (IOException e) {
-			System.err.println(e.getMessage());
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 		}
 		return enigma;
 	}

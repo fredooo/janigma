@@ -47,10 +47,9 @@ public class Plugboard {
 	
 	/**
 	 * Adds a cable to the plugboard.
-	 * @param firstSymbol the character to swap with the
-	 * second character as a character
-	 * @param secondSymbol the character to swap with the
-	 * first character as a character
+	 * @param firstSymbol the character to swap with the second character as a character
+	 * @param secondSymbol the character to swap with the first character as a character
+	 * @throws NoSuchSymbolException if one given symbol is invalid
 	 */
 	public void addCable(char firstSymbol, char secondSymbol) throws NoSuchSymbolException {
 		addCable(Original.toInt(firstSymbol), Original.toInt(secondSymbol));
@@ -85,6 +84,18 @@ public class Plugboard {
 	 */
 	public int swappedWith(int symbol) {
 		return plugs[symbol];
+	}
+	
+	@Override
+	public boolean equals(Object other){
+	    if (other == null) { return false; }
+	    if (other == this) { return true; }
+	    if (!(other instanceof Plugboard)) { return false; }
+	    final Plugboard otherPlugboard = (Plugboard) other;
+	    for (int i = 0; i < this.plugs.length; i++) {
+	    	if (otherPlugboard.plugs[i] != this.plugs[i]) { return false; }
+	    }
+	    return true;
 	}
 	
 }
