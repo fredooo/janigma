@@ -1,6 +1,8 @@
 package de.fredooo.janigma.machine;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import de.fredooo.janigma.symbols.NoSuchSymbolException;
@@ -12,7 +14,8 @@ import de.fredooo.janigma.symbols.Original;
  * @since 2011-11-18
  * @version 0.0.4 (last revised 2016-03-02)
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "machine")
+@JsonSubTypes({ @Type(value = EnigmaM3.class, name = "m3"), @Type(value = EnigmaM4.class, name = "m4") })
 public abstract class Enigma {
 	
 	@JsonProperty("rightRotor")
@@ -31,6 +34,7 @@ public abstract class Enigma {
 	 * Constructs a basic Enigma object, that only consists of a
 	 * plugboard and rotors.
 	 * @see EnigmaM3
+	 * @see EnigmaM4
 	 */
 	protected Enigma() {
 		this.rightRotor = Rotor.createRotor(Rotor.M3_III);

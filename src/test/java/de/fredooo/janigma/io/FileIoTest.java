@@ -125,7 +125,7 @@ public class FileIoTest extends TestCase {
 	public static void testLoadWithNonExistingFile() {
 		final File testFile = new File(TEST_FILE_PATH);
 		Enigma enigma = FileIo.loadEnigmaMachine(testFile);
-		Assert.assertNull(enigma);
+		Assert.assertNull("Enigma machine not null!", enigma);
 	}
 	
 	/**
@@ -133,7 +133,7 @@ public class FileIoTest extends TestCase {
 	 */
 	public static void testLoadWithNullFile() {
 		Enigma enigma = FileIo.loadEnigmaMachine(null);
-		Assert.assertNull(enigma);
+		Assert.assertNull("Enigma machine not null!", enigma);
 	}
 	
 	/**

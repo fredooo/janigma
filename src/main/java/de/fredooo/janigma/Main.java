@@ -1,6 +1,5 @@
 package de.fredooo.janigma;
 
-import de.fredooo.janigma.symbols.NoSuchSymbolException;
 import de.fredooo.janigma.ui.console.TerminalUI;
 import de.fredooo.janigma.ui.graphical.MainWindow;
 import de.fredooo.janigma.ui.graphical.Theme;

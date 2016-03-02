@@ -97,7 +97,30 @@ public class ReflectorTest extends TestCase {
 			Assert.assertEquals("Invalid name!", reflector.name(), Reflector.M4_THIN_REFLECTOR_LABELS[i]);
 		}
 	}
+	
+	/**
+	 * Tests the arguments of the {@link Reflector#createReflector(int)} method.
+	 */
+	public void testCreateReflectorArguments() {
+		for (int i = 0; i <= Reflector.M4_THIN_C; i++) {
+			Reflector reflector = Reflector.createReflector(i);
+			Assert.assertNotNull("null is not a valid reflector!", reflector);
+		}
+		try {
+			Reflector.createReflector(-1);
+			Assert.fail("No IllegalArgumentException thrown!");
+		} catch (IllegalArgumentException e) {
+			Assert.assertEquals("Wrong exception message!", "No such reflector!", e.getMessage());
+		}	
+		try {
+			Reflector.createReflector(5);
+			Assert.fail("No IllegalArgumentException thrown!");
+		} catch (IllegalArgumentException e) {
+			Assert.assertEquals("Wrong exception message!", "No such reflector!", e.getMessage());
 
+		}
+	}
+	
 	/**
 	 * Runs all test defined in this class.
 	 * @param args not used

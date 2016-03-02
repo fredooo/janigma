@@ -2,16 +2,20 @@ package de.fredooo.janigma.ui.graphical;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 
+import de.fredooo.janigma.io.FileIo;
 import de.fredooo.janigma.machine.Enigma;
 import de.fredooo.janigma.machine.EnigmaM3;
 import de.fredooo.janigma.machine.EnigmaM4;
@@ -33,6 +37,8 @@ import javax.swing.JOptionPane;
  */
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame implements ActionListener {
+	
+	private static final FileNameExtensionFilter JSON = new FileNameExtensionFilter("JSON File", "json");
 	
 	private static MainWindow instance;
 	
@@ -64,6 +70,8 @@ public class MainWindow extends JFrame implements ActionListener {
 	
 	private JMenuItem m3Item;
 	private JMenuItem m4Item;
+	private JMenuItem save;
+	private JMenuItem load;
 	private JMenuItem aboutItem;
 
 	/**
@@ -182,8 +190,8 @@ public class MainWindow extends JFrame implements ActionListener {
 		panel.add(btnEnDecrypt);
 		btnEnDecrypt.addActionListener(this);
 		
-		btnConfig = new JButton("Configuration");
-		btnConfig.setBounds(160, 448, 120, 23);
+		btnConfig = new JButton("Change Configuration");
+		btnConfig.setBounds(120, 448, 160, 23);
 		panel.add(btnConfig);
 		btnConfig.addActionListener(this);
 			
@@ -218,6 +226,19 @@ public class MainWindow extends JFrame implements ActionListener {
 		rot2Text.setText(String.valueOf(Original.toChar(enigma.getLeftRotor().getPosition())));
 		rot3Text.setText(String.valueOf(Original.toChar(enigma.getMiddleRotor().getPosition())));
 		rot4Text.setText(String.valueOf(Original.toChar(enigma.getRightRotor().getPosition())));
+	}
+	
+	private void updateMachine() {
+		m4Active = enigma instanceof EnigmaM4;
+		if (m4Active) {
+			machineName.setText("- Enigma M4 -");
+			btnRot1Up.setEnabled(true);
+			btnRot1Down.setEnabled(true);
+		} else {
+			machineName.setText("- Enigma M3 -");
+			btnRot1Up.setEnabled(false);
+			btnRot1Down.setEnabled(false);
+		}
 	}
 	
 	@Override
@@ -270,17 +291,35 @@ public class MainWindow extends JFrame implements ActionListener {
 		// Menu bar items
 		else if (a.getSource().equals(m3Item)) {
 			enigma = new EnigmaM3();
-			m4Active = false;
-			machineName.setText("- Enigma M3 -");
-			btnRot1Up.setEnabled(false);
-			btnRot1Down.setEnabled(false);
+			updateMachine();
 		}
 		else if (a.getSource().equals(m4Item)) {
 			enigma = new EnigmaM4();
-			m4Active = true;
-			machineName.setText("- Enigma M4 -");
-			btnRot1Up.setEnabled(true);
-			btnRot1Down.setEnabled(true);
+			updateMachine();
+		}
+		else if (a.getSource().equals(save)) {
+			JFileChooser fc = new JFileChooser();
+			fc.setDialogTitle("Save Configuration");
+			fc.setFileFilter(JSON);
+			int fcReturn = fc.showSaveDialog(this);
+			if (fcReturn == JFileChooser.APPROVE_OPTION) {
+				File file = fc.getSelectedFile();
+				if (!file.getName().endsWith(".json")) {
+					file = new File(file + ".json");
+				}
+				FileIo.saveEnigmaMachine(file, enigma);
+			}
+		}
+		else if (a.getSource().equals(load)) {
+			JFileChooser fc = new JFileChooser();
+			fc.setDialogTitle("Load Configuration");
+			fc.setFileFilter(JSON);
+			int fcReturn = fc.showOpenDialog(this);
+			if (fcReturn == JFileChooser.APPROVE_OPTION) {
+				File file = fc.getSelectedFile();
+				enigma = FileIo.loadEnigmaMachine(file);
+				updateMachine();
+			}
 		}
 		else if (a.getSource().equals(aboutItem)) {
 			AboutDialog frame = new AboutDialog();
@@ -294,7 +333,7 @@ public class MainWindow extends JFrame implements ActionListener {
 		}
 		
 		// Always update rotor positions
-		updateRotors();		
+		updateRotors();
 	}
 	
 	/**
@@ -314,6 +353,17 @@ public class MainWindow extends JFrame implements ActionListener {
 		m4Item = new JMenuItem("Enigma M4");
 		m4Item.addActionListener(this);
 		machine.add(m4Item);
+		
+		JMenu config = new JMenu("Configuration");
+		menuBar.add(config);
+		
+		save = new JMenuItem("Save");
+		save.addActionListener(this);
+		config.add(save);
+		
+		load = new JMenuItem("Load");
+		load.addActionListener(this);
+		config.add(load);
 		
 		JMenu help = new JMenu("Help");
 		menuBar.add(help);

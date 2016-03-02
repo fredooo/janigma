@@ -134,6 +134,29 @@ public class RotorTest extends TestCase {
 	}
 	
 	/**
+	 * Tests the arguments of the {@link Rotor#createRotor(int)} method.
+	 */
+	public void testCreateReflectorArguments() {
+		for (int i = 0; i <= Rotor.M4_GREEK_GAMMA; i++) {
+			Rotor rotor = Rotor.createRotor(i);
+			Assert.assertNotNull("null is not a valid rotor!", rotor);
+		}
+		try {
+			Rotor.createRotor(-1);
+			Assert.fail("No IllegalArgumentException thrown!");
+		} catch (IllegalArgumentException e) {
+			Assert.assertEquals("Wrong exception message!", "No such rotor!", e.getMessage());
+		}	
+		try {
+			Rotor.createRotor(10);
+			Assert.fail("No IllegalArgumentException thrown!");
+		} catch (IllegalArgumentException e) {
+			Assert.assertEquals("Wrong exception message!", "No such rotor!", e.getMessage());
+
+		}
+	}
+	
+	/**
 	 * Runs all test defined in this class.
 	 * @param args not used
 	 */
