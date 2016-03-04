@@ -11,6 +11,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.border.EmptyBorder;
 
 import de.fredooo.janigma.machine.Enigma;
@@ -27,7 +28,7 @@ import javax.swing.SwingConstants;
  * Provides the "Configuration" dialog.
  * @author Frederik Dennig
  * @since 2013-12-14
- * @version 0.0.2 (last revised 2016-03-02)
+ * @version 0.0.3 (last revised 2016-03-04)
  */
 @SuppressWarnings("serial")
 public class ConfigDialog extends JDialog implements ActionListener {
@@ -35,7 +36,10 @@ public class ConfigDialog extends JDialog implements ActionListener {
 	private static char UNSELECTED = '-';
 	
 	private boolean m4Active;
-	private Enigma enigma;  
+	private Enigma enigma;
+	
+	private JRadioButton m3;
+	private JRadioButton m4;
 
 	private JComboBox<ListEntry> refList;
 	
@@ -68,7 +72,7 @@ public class ConfigDialog extends JDialog implements ActionListener {
 		
 		this.setTitle("Configuration");
 		this.setModal(true);
-		this.setSize(307, 400);
+		this.setSize(307, 430);
 		this.setResizable(false);
 		this.setLocation(MainWindow.instance().getLocation());
 		
@@ -77,160 +81,178 @@ public class ConfigDialog extends JDialog implements ActionListener {
 		panel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		this.setContentPane(panel);
 		
+		JLabel machine = new JLabel("Machine:");
+		machine.setBounds(10, 10, 100, 20);
+		panel.add(machine);
+		
+		final ActionListener machineActionListener = createMachineActionListener();
+		
+		m3 = new JRadioButton("Enigma M3");
+		m3.addActionListener(machineActionListener);
+		m3.setSelected(!m4Active);
+		m3.setBounds(75, 10, 100, 20);
+		panel.add(m3);
+		
+		m4 = new JRadioButton("Enigma M4");
+		m4.setSelected(m4Active);
+		m4.addActionListener(machineActionListener);
+		m4.setBounds(175, 11, 100, 20);
+		panel.add(m4);
+		
 		JLabel reflector = new JLabel("Reflector:");
-		reflector.setBounds(10, 11, 62, 14);
+		reflector.setBounds(10, 40, 62, 14);
 		panel.add(reflector);
 		
 		refList = new JComboBox<ListEntry>();
-		refList.setBounds(74, 8, 51, 20);
+		refList.setBounds(74, 37, 51, 20);
 		panel.add(refList);
 		
 		JLabel rotors = new JLabel("Rotors:");
-		rotors.setBounds(10, 39, 46, 14);
+		rotors.setBounds(10, 68, 46, 14);
 		panel.add(rotors);
 
 		rot1List = new JComboBox<ListEntry>();
-		rot1List.setBounds(61, 36, 51, 20);
+		rot1List.setBounds(61, 65, 51, 20);
 		panel.add(rot1List);
 		
 		rot2List = new JComboBox<ListEntry>();
-		rot2List.setBounds(122, 36, 51, 20);
+		rot2List.setBounds(122, 65, 51, 20);
 		panel.add(rot2List);
 		
 		rot3List = new JComboBox<ListEntry>();
-		rot3List.setBounds(183, 36, 51, 20);
+		rot3List.setBounds(183, 65, 51, 20);
 		panel.add(rot3List);
 		
 		rot4List = new JComboBox<ListEntry>();
-		rot4List.setBounds(244, 36, 51, 20);
+		rot4List.setBounds(244, 65, 51, 20);
 		panel.add(rot4List);
 		
 		JLabel offset = new JLabel("Offset:");
-		offset.setBounds(10, 70, 46, 14);
+		offset.setBounds(10, 99, 46, 14);
 		panel.add(offset);
 		
 		offs1List = new JComboBox<String>();
-		offs1List.setBounds(61, 67, 51, 20);
+		offs1List.setBounds(61, 96, 51, 20);
 		panel.add(offs1List);
 		
 		offs2List = new JComboBox<String>();
-		offs2List.setBounds(122, 67, 51, 20);
+		offs2List.setBounds(122, 96, 51, 20);
 		panel.add(offs2List);
 		
 		offs3List = new JComboBox<String>();
-		offs3List.setBounds(183, 67, 51, 20);
+		offs3List.setBounds(183, 96, 51, 20);
 		panel.add(offs3List);
 		
 		offs4List = new JComboBox<String>();
-		offs4List.setBounds(244, 67, 50, 20);
+		offs4List.setBounds(244, 96, 50, 20);
 		panel.add(offs4List);
 		
 		JLabel plugboard = new JLabel("Plugboard:");
-		plugboard.setBounds(10, 98, 100, 14);
+		plugboard.setBounds(10, 127, 100, 14);
 		panel.add(plugboard);
 				
 		JComboBox<Character> p1a = new JComboBox<Character>();
-		p1a.setBounds(10, 123, 46, 20);
+		p1a.setBounds(10, 152, 46, 20);
 		panel.add(p1a);
 				
 		JComboBox<Character> p1b = new JComboBox<Character>();
-		p1b.setBounds(79, 123, 46, 20);
+		p1b.setBounds(79, 152, 46, 20);
 		panel.add(p1b);
 			
 		JComboBox<Character> p2a = new JComboBox<Character>();
-		p2a.setBounds(10, 155, 46, 20);
+		p2a.setBounds(10, 184, 46, 20);
 		panel.add(p2a);
 		
 		JComboBox<Character> p2b = new JComboBox<Character>();
-		p2b.setBounds(79, 154, 46, 20);
+		p2b.setBounds(79, 184, 46, 20);
 		panel.add(p2b);
 				
 		JComboBox<Character> p3a = new JComboBox<Character>();
-		p3a.setBounds(10, 186, 46, 20);
+		p3a.setBounds(10, 215, 46, 20);
 		panel.add(p3a);
 		
 		JComboBox<Character> p3b = new JComboBox<Character>();
-		p3b.setBounds(79, 186, 46, 20);
+		p3b.setBounds(79, 215, 46, 20);
 		panel.add(p3b);
 				
 		JComboBox<Character> p4a = new JComboBox<Character>();
-		p4a.setBounds(10, 217, 46, 20);
+		p4a.setBounds(10, 246, 46, 20);
 		panel.add(p4a);
 		
 		JComboBox<Character> p4b = new JComboBox<Character>();
-		p4b.setBounds(79, 217, 46, 20);
+		p4b.setBounds(79, 246, 46, 20);
 		panel.add(p4b);
 		
 		JComboBox<Character> p5a = new JComboBox<Character>();
-		p5a.setBounds(10, 248, 46, 20);
+		p5a.setBounds(10, 277, 46, 20);
 		panel.add(p5a);
 				
 		JComboBox<Character> p5b = new JComboBox<Character>();
-		p5b.setBounds(79, 248, 46, 20);
+		p5b.setBounds(79, 277, 46, 20);
 		panel.add(p5b);
 		
 		JComboBox<Character> p6a = new JComboBox<Character>();
-		p6a.setBounds(10, 279, 46, 20);
+		p6a.setBounds(10, 308, 46, 20);
 		panel.add(p6a);
 		
 		JComboBox<Character> p6b = new JComboBox<Character>();
-		p6b.setBounds(79, 279, 46, 20);
+		p6b.setBounds(79, 308, 46, 20);
 		panel.add(p6b);
 		
 		JComboBox<Character> p7a = new JComboBox<Character>();
-		p7a.setBounds(10, 310, 46, 20);
+		p7a.setBounds(10, 339, 46, 20);
 		panel.add(p7a);
 		
 		JComboBox<Character> p7b = new JComboBox<Character>();
-		p7b.setBounds(79, 310, 46, 20);
+		p7b.setBounds(79, 339, 46, 20);
 		panel.add(p7b);
 		
 		JComboBox<Character> p8a = new JComboBox<Character>();
-		p8a.setBounds(183, 123, 46, 20);
+		p8a.setBounds(183, 152, 46, 20);
 		panel.add(p8a);
 		
 		JComboBox<Character> p8b = new JComboBox<Character>();
-		p8b.setBounds(249, 123, 46, 20);
+		p8b.setBounds(249, 152, 46, 20);
 		panel.add(p8b);
 		
 		JComboBox<Character> p9a = new JComboBox<Character>();
-		p9a.setBounds(183, 155, 46, 20);
+		p9a.setBounds(183, 184, 46, 20);
 		panel.add(p9a);
 		
 		JComboBox<Character> p9b = new JComboBox<Character>();
-		p9b.setBounds(249, 155, 46, 20);
+		p9b.setBounds(249, 184, 46, 20);
 		panel.add(p9b);
 		
 		JComboBox<Character> p10a = new JComboBox<Character>();
-		p10a.setBounds(183, 186, 46, 20);
+		p10a.setBounds(183, 215, 46, 20);
 		panel.add(p10a);
 		
 		JComboBox<Character> p10b = new JComboBox<Character>();
-		p10b.setBounds(249, 186, 46, 20);
+		p10b.setBounds(249, 215, 46, 20);
 		panel.add(p10b);
 		
 		JComboBox<Character> p11a = new JComboBox<Character>();
-		p11a.setBounds(183, 217, 46, 20);
+		p11a.setBounds(183, 246, 46, 20);
 		panel.add(p11a);
 		
 		JComboBox<Character> p11b = new JComboBox<Character>();
-		p11b.setBounds(249, 217, 46, 20);
+		p11b.setBounds(249, 246, 46, 20);
 		panel.add(p11b);
 		
 		JComboBox<Character> p12a = new JComboBox<Character>();
-		p12a.setBounds(183, 248, 46, 20);
+		p12a.setBounds(183, 277, 46, 20);
 		panel.add(p12a);
 		
 		JComboBox<Character> p12b = new JComboBox<Character>();
-		p12b.setBounds(249, 248, 46, 20);
+		p12b.setBounds(249, 277, 46, 20);
 		panel.add(p12b);
 		
 		JComboBox<Character> p13a = new JComboBox<Character>();
-		p13a.setBounds(183, 279, 46, 20);
+		p13a.setBounds(183, 308, 46, 20);
 		panel.add(p13a);
 		
 		JComboBox<Character> p13b = new JComboBox<Character>();
-		p13b.setBounds(249, 279, 46, 20);
+		p13b.setBounds(249, 308, 46, 20);
 		panel.add(p13b);
 		
 		plugboardLists = new ArrayList<JComboBox<Character>>(26);
@@ -262,17 +284,17 @@ public class ConfigDialog extends JDialog implements ActionListener {
 		plugboardLists.add(p13b);
 		
 		btnApply = new JButton("Apply");
-		btnApply.setBounds(23, 345, 89, 23);
+		btnApply.setBounds(23, 374, 89, 23);
 		panel.add(btnApply);
 		btnApply.addActionListener(this);
 		
 		btnClear = new JButton("Clear Plugbord");
-		btnClear.setBounds(170, 313, 125, 23);
+		btnClear.setBounds(170, 342, 125, 23);
 		panel.add(btnClear);
 		btnClear.addActionListener(this);
 		
 		btnReset = new JButton("Reset Settings");
-		btnReset.setBounds(170, 345, 125, 23);
+		btnReset.setBounds(170, 374, 125, 23);
 		panel.add(btnReset);
 		btnReset.addActionListener(this);
 		
@@ -280,14 +302,37 @@ public class ConfigDialog extends JDialog implements ActionListener {
 		for (int i = 0; i < 7; i++) {
 			JLabel lbl = new JLabel("\u2194");
 			lbl.setHorizontalAlignment(SwingConstants.CENTER);
-			lbl.setBounds(45, 123 + (i * 32), 46, 14);
+			lbl.setBounds(45, 152 + (i * 32), 46, 14);
 			panel.add(lbl);
 		}
 		for (int i = 0; i < 6; i++) {
 			JLabel label = new JLabel("\u2194");
 			label.setHorizontalAlignment(SwingConstants.CENTER);
-			label.setBounds(216, 123 + (i * 32), 46, 14);
+			label.setBounds(216, 152 + (i * 32), 46, 14);
 			panel.add(label);
+		}
+		
+		// Left, middle and right rotor
+		for (ListEntry le : buildM3RotorListEntries()) {
+			 rot2List.addItem(le);
+			 rot3List.addItem(le);
+			 rot4List.addItem(le);
+		}
+		
+		// Offset of left, middle and right rotor
+		for (int i = 1; i <= 26; i++) {
+			offs2List.addItem(String.valueOf(i));
+			offs3List.addItem(String.valueOf(i));
+			offs4List.addItem(String.valueOf(i));
+		}
+		
+		// Plugboard
+		for (int i = 0; i < 26; i++) {
+			plugboardLists.get(i).addItem(UNSELECTED);
+			for (char c : Original.ORIGINAL) {
+				plugboardLists.get(i).addItem(c);
+			}
+			plugboardLists.get(i).setSelectedItem(UNSELECTED);
 		}
 		
 		loadConfig();
@@ -296,8 +341,9 @@ public class ConfigDialog extends JDialog implements ActionListener {
 	/**
 	 * Loads the configuration of a Enigma machine
 	 */
-	private void loadConfig() {		
-		// Refelector
+	private void loadConfig() {	
+		// Reflector
+		refList.removeAllItems();
 		if (m4Active) {
 			for (ListEntry le : buildM4ThinReflectorListEntries()) {
 				 refList.addItem(le);
@@ -311,55 +357,40 @@ public class ConfigDialog extends JDialog implements ActionListener {
 		}
 		
 		// Greek rotor
+		rot1List.removeAllItems();
 		if (m4Active) {
 			for (ListEntry le : buildM4GreekRotorListEntries()) {
 				 rot1List.addItem(le);
 			}
 			rot1List.setSelectedIndex(((EnigmaM4) enigma).getGreekRotor().type() - Rotor.M4_GREEK_BETA);
+			rot1List.setEnabled(true);
 		} else {
 			rot1List.setEnabled(false);
 		}
 		
 		// Left, middle and right rotor
-		for (ListEntry le : buildM3RotorListEntries()) {
-			 rot2List.addItem(le);
-			 rot3List.addItem(le);
-			 rot4List.addItem(le);
-		}
-		
 		rot2List.setSelectedIndex(enigma.getLeftRotor().type());
 		rot3List.setSelectedIndex(enigma.getMiddleRotor().type());
 		rot4List.setSelectedIndex(enigma.getRightRotor().type());
 		
-		// Offset
+		// Greek rotor offset
+		offs1List.removeAllItems();
 		if (m4Active) {
 			for (int i = 1; i <= 26; i++) {
 				offs1List.addItem(String.valueOf(i));
 			}
+			offs1List.setSelectedItem(String.valueOf(((EnigmaM4) enigma).getGreekRotor().getOffset() + 1));
+			offs1List.setEnabled(true);
 		} else {
 			offs1List.setEnabled(false);
 		}
-		for (int i = 1; i <= 26; i++) {
-			offs2List.addItem(String.valueOf(i));
-			offs3List.addItem(String.valueOf(i));
-			offs4List.addItem(String.valueOf(i));
-		}
 		
-		if (m4Active) {
-			offs1List.setSelectedItem(String.valueOf(((EnigmaM4) enigma).getGreekRotor().getOffset() + 1));
-		}
+		// Offset of left, middle and right rotor
 		offs2List.setSelectedItem(String.valueOf(enigma.getLeftRotor().getOffset() + 1));
 		offs3List.setSelectedItem(String.valueOf(enigma.getMiddleRotor().getOffset() + 1));
 		offs4List.setSelectedItem(String.valueOf(enigma.getRightRotor().getOffset() + 1));
 
 		// Plugboard
-		for (int i = 0; i < 26; i++) {
-			plugboardLists.get(i).addItem(UNSELECTED);
-			for (char c : Original.ORIGINAL) {
-				plugboardLists.get(i).addItem(c);
-			}
-			plugboardLists.get(i).setSelectedItem(UNSELECTED);
-		}
 		ArrayList<Integer> noShow = new ArrayList<Integer>();
 		int p = 0;
 		for (int i = 0; i < 26; i++) {
@@ -454,6 +485,7 @@ public class ConfigDialog extends JDialog implements ActionListener {
 						}
 					}
 				}
+				MainWindow.instance().updateMachine(enigma);
 				dispose();
 			} else {
 				JOptionPane.showMessageDialog(this,
@@ -475,6 +507,10 @@ public class ConfigDialog extends JDialog implements ActionListener {
 		}
 	}
 	
+	/**
+	 * Creates the list entries for Enigma M3 rotor lists.
+	 * @return the created list of list entries
+	 */
 	private List<ListEntry> buildM3RotorListEntries() {
 		List<ListEntry> result = new ArrayList<ListEntry>();
 		for (int i = 0; i < Rotor.M3_ROTOR_LABELS.length; i++) {
@@ -483,6 +519,10 @@ public class ConfigDialog extends JDialog implements ActionListener {
 		return result;
 	}
 	
+	/**
+	 * Creates the list entries for the Enigma M4 greek rotor list.
+	 * @return the created list of list entries
+	 */
 	private List<ListEntry> buildM4GreekRotorListEntries() {
 		List<ListEntry> result = new ArrayList<ListEntry>();
 		for (int i = 0; i < Rotor.M4_GREEK_ROTOR_LABELS.length; i++) {
@@ -491,6 +531,10 @@ public class ConfigDialog extends JDialog implements ActionListener {
 		return result;
 	}
 	
+	/**
+	 * Creates the list entries for the Enigma M3 reflector list.
+	 * @return the created list of list entries
+	 */
 	private List<ListEntry> buildM3ReflectorListEntries() {
 		List<ListEntry> result = new ArrayList<ListEntry>();
 		for (int i = 0; i < Reflector.M3_REFLECTOR_LABELS.length; i++) {
@@ -499,6 +543,10 @@ public class ConfigDialog extends JDialog implements ActionListener {
 		return result;
 	}
 		
+	/**
+	 * Creates the list entries for the Enigma M4 reflector list.
+	 * @return the created list of list entries
+	 */
 	private List<ListEntry> buildM4ThinReflectorListEntries() {
 		List<ListEntry> result = new ArrayList<ListEntry>();
 		for (int i = 0; i < Reflector.M4_THIN_REFLECTOR_LABELS.length; i++) {
@@ -507,6 +555,38 @@ public class ConfigDialog extends JDialog implements ActionListener {
 		return result;
 	}
 	
+	/**
+	 * Creates the ActionListener for the machine radio buttons.
+	 * @return the created ActionListener
+	 */
+	private ActionListener createMachineActionListener() {
+		return new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (e.getSource().equals(m3)) {;
+					m4Active = false;
+				} else if (e.getSource().equals(m4)) {
+					m4Active = true;
+				}
+				
+				m3.setSelected(!m4Active);
+				m4.setSelected(m4Active);
+				
+				if (m4Active) {
+					enigma = new EnigmaM4();
+				} else {
+					enigma = new EnigmaM3();
+				}
+				
+				loadConfig();
+			}
+		};
+	}
+	
+	/**
+	 * Provides the ListEntry type for reflector and rotor lists.
+	 */
 	private class ListEntry {
 		
 		private final String name;

@@ -33,7 +33,7 @@ import javax.swing.JOptionPane;
  * Provides the main window of the application.
  * @author Frederik Dennig
  * @since 2013-12-13
- * @version 0.0.2 (last revised 2016-03-02)
+ * @version 0.0.3 (last revised 2016-03-04)
  */
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame implements ActionListener {
@@ -66,12 +66,11 @@ public class MainWindow extends JFrame implements ActionListener {
 	private JTextArea outputText;
 	
 	private JButton btnEnDecrypt;
-	private JButton btnConfig;
+	private JButton btnClear;
 	
-	private JMenuItem m3Item;
-	private JMenuItem m4Item;
-	private JMenuItem save;
-	private JMenuItem load;
+	private JMenuItem openConfig;
+	private JMenuItem saveConfig;
+	private JMenuItem loadConfig;
 	private JMenuItem aboutItem;
 
 	/**
@@ -190,10 +189,10 @@ public class MainWindow extends JFrame implements ActionListener {
 		panel.add(btnEnDecrypt);
 		btnEnDecrypt.addActionListener(this);
 		
-		btnConfig = new JButton("Change Configuration");
-		btnConfig.setBounds(120, 448, 160, 23);
-		panel.add(btnConfig);
-		btnConfig.addActionListener(this);
+		btnClear = new JButton("Clear");
+		btnClear.setBounds(200, 448, 80, 23);
+		panel.add(btnClear);
+		btnClear.addActionListener(this);
 			
 		updateRotors();
 	}
@@ -228,16 +227,21 @@ public class MainWindow extends JFrame implements ActionListener {
 		rot4Text.setText(String.valueOf(Original.toChar(enigma.getRightRotor().getPosition())));
 	}
 	
-	private void updateMachine() {
-		m4Active = enigma instanceof EnigmaM4;
+	/**
+	 * Changes the Enigma machine to a given one.
+	 * @param enigma the Enigma machine
+	 */
+	public void updateMachine(Enigma enigma) {
+		this.enigma = enigma;
+		this.m4Active = enigma instanceof EnigmaM4;
 		if (m4Active) {
-			machineName.setText("- Enigma M4 -");
-			btnRot1Up.setEnabled(true);
-			btnRot1Down.setEnabled(true);
+			this.machineName.setText("- Enigma M4 -");
+			this.btnRot1Up.setEnabled(true);
+			this.btnRot1Down.setEnabled(true);
 		} else {
-			machineName.setText("- Enigma M3 -");
-			btnRot1Up.setEnabled(false);
-			btnRot1Down.setEnabled(false);
+			this.machineName.setText("- Enigma M3 -");
+			this.btnRot1Up.setEnabled(false);
+			this.btnRot1Down.setEnabled(false);
 		}
 	}
 	
@@ -288,16 +292,18 @@ public class MainWindow extends JFrame implements ActionListener {
 			}
 		}
 		
+		// Clear button
+		else if (a.getSource().equals(btnClear)) {
+			inputText.setText("");
+			outputText.setText("");
+		}
+		
 		// Menu bar items
-		else if (a.getSource().equals(m3Item)) {
-			enigma = new EnigmaM3();
-			updateMachine();
+		else if (a.getSource().equals(openConfig)) {
+			ConfigDialog frame = new ConfigDialog(m4Active, enigma);
+			frame.setVisible(true);
 		}
-		else if (a.getSource().equals(m4Item)) {
-			enigma = new EnigmaM4();
-			updateMachine();
-		}
-		else if (a.getSource().equals(save)) {
+		else if (a.getSource().equals(saveConfig)) {
 			JFileChooser fc = new JFileChooser();
 			fc.setDialogTitle("Save Configuration");
 			fc.setFileFilter(JSON);
@@ -310,25 +316,18 @@ public class MainWindow extends JFrame implements ActionListener {
 				FileIo.saveEnigmaMachine(file, enigma);
 			}
 		}
-		else if (a.getSource().equals(load)) {
+		else if (a.getSource().equals(loadConfig)) {
 			JFileChooser fc = new JFileChooser();
 			fc.setDialogTitle("Load Configuration");
 			fc.setFileFilter(JSON);
 			int fcReturn = fc.showOpenDialog(this);
 			if (fcReturn == JFileChooser.APPROVE_OPTION) {
 				File file = fc.getSelectedFile();
-				enigma = FileIo.loadEnigmaMachine(file);
-				updateMachine();
+				updateMachine(FileIo.loadEnigmaMachine(file));
 			}
 		}
 		else if (a.getSource().equals(aboutItem)) {
 			AboutDialog frame = new AboutDialog();
-			frame.setVisible(true);
-		}
-		
-		// Configuration button
-		else if (a.getSource().equals(btnConfig)) {
-			ConfigDialog frame = new ConfigDialog(m4Active, enigma);
 			frame.setVisible(true);
 		}
 		
@@ -343,27 +342,20 @@ public class MainWindow extends JFrame implements ActionListener {
 	private JMenuBar createMenuBar() {
 		JMenuBar menuBar = new JMenuBar();
 		
-		JMenu machine = new JMenu("Machine");
-		menuBar.add(machine);
-		
-		m3Item = new JMenuItem("Enigma M3");
-		m3Item.addActionListener(this);
-		machine.add(m3Item);
-		
-		m4Item = new JMenuItem("Enigma M4");
-		m4Item.addActionListener(this);
-		machine.add(m4Item);
-		
 		JMenu config = new JMenu("Configuration");
 		menuBar.add(config);
 		
-		save = new JMenuItem("Save");
-		save.addActionListener(this);
-		config.add(save);
+		openConfig = new JMenuItem("Open");
+		openConfig.addActionListener(this);
+		config.add(openConfig);
 		
-		load = new JMenuItem("Load");
-		load.addActionListener(this);
-		config.add(load);
+		saveConfig = new JMenuItem("Save");
+		saveConfig.addActionListener(this);
+		config.add(saveConfig);
+		
+		loadConfig = new JMenuItem("Load");
+		loadConfig.addActionListener(this);
+		config.add(loadConfig);
 		
 		JMenu help = new JMenu("Help");
 		menuBar.add(help);
