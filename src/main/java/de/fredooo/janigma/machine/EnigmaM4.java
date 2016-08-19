@@ -64,41 +64,18 @@ public final class EnigmaM4 extends Enigma {
 	@Override
 	public int use(int input) {
 		actuateSteppingMechanism();
-		
-		// Following circuitry to get the ciphered input
 		input = plugboard.swappedWith(input);
-		
-		input = carryOver(input + rightRotor.getPosition() - rightRotor.getOffset());
 		input = rightRotor.inwardsOutputOf(input);
-		input = carryOver(input - rightRotor.getPosition() + rightRotor.getOffset()
-				+ middleRotor.getPosition() - middleRotor.getOffset());
 		input = middleRotor.inwardsOutputOf(input);
-		input = carryOver(input - middleRotor.getPosition() + middleRotor.getOffset()
-				+ leftRotor.getPosition() - leftRotor.getOffset());
 		input = leftRotor.inwardsOutputOf(input);
-		input = carryOver(input - leftRotor.getPosition() + leftRotor.getOffset()
-				+ greekRotor.getPosition() - greekRotor.getOffset());
 		input = greekRotor.inwardsOutputOf(input);
-		input = carryOver(input - greekRotor.getPosition() + greekRotor.getOffset());
-		
 		input = thinReflector.outputOf(input);
-		
-		input = carryOver(input + greekRotor.getPosition() - greekRotor.getOffset());
 		input = greekRotor.outwardsOutputOf(input);
-		input = carryOver(input + leftRotor.getPosition() - leftRotor.getOffset()
-				- greekRotor.getPosition() + greekRotor.getOffset());
 		input = leftRotor.outwardsOutputOf(input);
-		input = carryOver(input + middleRotor.getPosition() - middleRotor.getOffset()
-				- leftRotor.getPosition() + leftRotor.getOffset());
 		input = middleRotor.outwardsOutputOf(input);
-		input = carryOver(input + rightRotor.getPosition() - rightRotor.getOffset()
-				- middleRotor.getPosition() + middleRotor.getOffset());
 		input = rightRotor.outwardsOutputOf(input);
-		input = carryOver(input - rightRotor.getPosition() + rightRotor.getOffset());
-		
 		input = plugboard.swappedWith(input);
-		
-		return input;		
+		return input;
 	}
 	
 	@Override

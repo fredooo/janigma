@@ -159,22 +159,26 @@ public class Rotor {
 
 	/**
 	 * Returns the corresponding output of a character in the inwards
-	 * direction of the rotor wiring.
+	 * direction of the rotor.
 	 * @param input the input character as a number
 	 * @return the corresponding output.
 	 */
 	public int inwardsOutputOf(int input) {
-		return inwardsWiring[input];
+		input = carryOver(input + this.getPosition() - this.getOffset());
+		input = this.inwardsWiring[input];
+		return carryOver(input - this.getPosition() + this.getOffset());
 	}
 
 	/**
 	 * Returns the corresponding output of a character in the outwards
-	 * direction of the rotor wiring.
+	 * direction of the rotor.
 	 * @param input the input character as a number
 	 * @return the corresponding output
 	 */
 	public int outwardsOutputOf(int input) {
-		return outwardsWiring[input];
+		input = carryOver(input + this.getPosition() - this.getOffset());
+		input = this.outwardsWiring[input];
+		return carryOver(input - this.getPosition() + this.getOffset());
 	}
 
 	/**
@@ -199,6 +203,22 @@ public class Rotor {
 	 */
 	public void setOffset(int offset) {
 		this.offset = offset;
+	}
+
+	/**
+	 * This method handles the carry over operations of the calculations in {@link #use}.
+	 * @param number the number from which to remove the carry over
+	 * @return a number between 0 and 25
+	 */
+	private static int carryOver(int number) {
+		if (number < 0) {
+			while (number < 0) {
+				number += 26;
+			}
+			return number;
+		} else {
+			return number % 26;
+		}
 	}
 
 	/**

@@ -159,21 +159,5 @@ public abstract class Enigma {
 	 * @return the encrypted or decrypted input
 	 */
 	public abstract int use(int input);
-	
-	/**
-	 * This method handles the carry over operations of the calculations in {@link #use}. 
-	 * @param number the number from which to remove the carry over
-	 * @return a number between 0 and 25
-	 */
-	protected final static int carryOver(int number) {
-		if (number < 0) {
-			while (number < 0) {
-				number += 26;
-			}
-			return number;
-		} else {
-			return number % 26;
-		}
-	}
-	
+
 }
