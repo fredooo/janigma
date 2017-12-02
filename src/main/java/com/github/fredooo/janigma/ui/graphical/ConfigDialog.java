@@ -46,10 +46,10 @@ public class ConfigDialog extends JDialog {
 	private JComboBox<Rotor> rotor3List;
 	private JComboBox<Rotor> rotor4List;
 	
-	private JComboBox<Integer> offset1List;
-	private JComboBox<Integer> offset2List;
-	private JComboBox<Integer> offset3List;
-	private JComboBox<Integer> offset4List;
+	private JComboBox<String> offset1List;
+	private JComboBox<String> offset2List;
+	private JComboBox<String> offset3List;
+	private JComboBox<String> offset4List;
 
 	private List<Pair<JComboBox<Character>, JComboBox<Character>>> plugboardList;
 
@@ -65,7 +65,7 @@ public class ConfigDialog extends JDialog {
         this.currEnigma = enigma;
 		this.plugboardList = new ArrayList<Pair<JComboBox<Character>, JComboBox<Character>>>(NUM_PLUGS);
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		//this.setResizable(false);
+		this.setResizable(false);
         this.setContentPane(createMainPanel());
         this.pack();
 		this.setLocation(MainWindow.instance().getLocation());
@@ -119,8 +119,7 @@ public class ConfigDialog extends JDialog {
         box.setAlignmentX(Box.LEFT_ALIGNMENT);
         box.add(new JLabel("Reflector:"));
         box.add(Box.createHorizontalStrut(10));
-        Reflector[] reflectors = m4Active ? Reflector.buildM4ThinReflectors() : Reflector.createM3Reflectors();
-        reflectorList = new JComboBox<Reflector>(reflectors);
+        reflectorList = new JComboBox<Reflector>();
         reflectorList.setMaximumSize(new Dimension(80, 32));
         box.add(reflectorList);
         return box;
@@ -130,7 +129,6 @@ public class ConfigDialog extends JDialog {
         Box box = Box.createHorizontalBox();
         box.setAlignmentX(Box.LEFT_ALIGNMENT);
         rotor1List = new JComboBox<Rotor>(Rotor.createM4GreekRotors());
-        rotor1List.setEditable(m4Active);
         rotor1List.setMaximumSize(new Dimension(80, 32));
         box.add(rotor1List);
         box.add(Box.createHorizontalStrut(5));
@@ -236,11 +234,20 @@ public class ConfigDialog extends JDialog {
 
 	private void loadMachineConfiguration(Enigma enigma) {
         m4Active = enigma instanceof EnigmaM4;
+        reflectorList.removeAllItems();
+        if (m4Active) { updateReflectorList(Reflector.buildM4ThinReflectors()); }
+        else { updateReflectorList(Reflector.createM3Reflectors()); }
         currEnigma = enigma;
         SwingUtilities.invokeLater(() -> {
             m3Radio.setSelected(!m4Active);
             m4Radio.setSelected(m4Active);
         });
+    }
+
+    private void updateReflectorList(Reflector[] reflectors) {
+        for (final Reflector reflector : reflectors) {
+            SwingUtilities.invokeLater(() -> reflectorList.addItem(reflector));
+        }
     }
 
     private void loadReflectorConfiguration(Enigma enigma) {
@@ -268,15 +275,15 @@ public class ConfigDialog extends JDialog {
     private void loadOffsetConfiguration(final Enigma enigma) {
         SwingUtilities.invokeLater(() -> {
             if (m4Active) {
-                offset1List.setSelectedItem(((EnigmaM4) enigma).getGreekRotor().getOffset() + 1);
+                offset1List.setSelectedIndex(((EnigmaM4) enigma).getGreekRotor().getOffset());
                 offset1List.setEnabled(true);
             } else {
-                offset1List.setSelectedItem(null);
+                offset1List.setSelectedIndex(-1);
                 offset1List.setEnabled(false);
             }
-            offset2List.setSelectedItem(enigma.getLeftRotor().getOffset() + 1);
-            offset3List.setSelectedItem(enigma.getMiddleRotor().getOffset() + 1);
-            offset4List.setSelectedItem(enigma.getRightRotor().getOffset() + 1);
+            offset2List.setSelectedIndex(enigma.getLeftRotor().getOffset());
+            offset3List.setSelectedIndex(enigma.getMiddleRotor().getOffset());
+            offset4List.setSelectedIndex(enigma.getRightRotor().getOffset());
         });
     }
 
@@ -346,10 +353,12 @@ public class ConfigDialog extends JDialog {
     }
 
     private void storeOffsetConfiguration() {
-        if (m4Active) { ((EnigmaM4) currEnigma).getGreekRotor().setOffset((int) offset1List.getSelectedItem() - 1); }
-        currEnigma.getLeftRotor().setOffset((int) offset2List.getSelectedItem() - 1);
-        currEnigma.getMiddleRotor().setOffset((int) offset3List.getSelectedItem() - 1);
-        currEnigma.getRightRotor().setOffset((int) offset4List.getSelectedItem() - 1);
+        if (m4Active) {
+            ((EnigmaM4) currEnigma).getGreekRotor().setOffset(extractPositionFromOffsetDropdown(offset1List));
+        }
+        currEnigma.getLeftRotor().setOffset(extractPositionFromOffsetDropdown(offset2List));
+        currEnigma.getMiddleRotor().setOffset(extractPositionFromOffsetDropdown(offset3List));
+        currEnigma.getRightRotor().setOffset(extractPositionFromOffsetDropdown(offset4List));
     }
 
     private void storePlugboardConfiguration() {
@@ -416,9 +425,9 @@ public class ConfigDialog extends JDialog {
         box.add(label);
     }
 
-    private static JComboBox<Integer> createOffsetDropdown() {
-        JComboBox<Integer> dropdown = new JComboBox<Integer>();
-        for (int i = 1; i <= NUM_SYMBOLS; i++) { dropdown.addItem(i); }
+    private static JComboBox<String> createOffsetDropdown() {
+        JComboBox<String> dropdown = new JComboBox<String>();
+        for (int i = 0; i < NUM_SYMBOLS; i++) { dropdown.addItem(Original.toChar(i) + " - " + (i + 1)); }
         return dropdown;
     }
 
@@ -428,6 +437,16 @@ public class ConfigDialog extends JDialog {
 		for (char c : Original.ORIGINAL) { dropdown.addItem(c); }
         return dropdown;
 	}
+
+	private static int extractPositionFromOffsetDropdown(JComboBox<String> dropdown) {
+        int result = -1;
+        try {
+            result = Original.toInt(((String) dropdown.getSelectedItem()).charAt(0));
+        } catch (NoSuchSymbolException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
     public static void showDialog(final boolean m4Active, final Enigma enigma) {
 		SwingUtilities.invokeLater(() -> new ConfigDialog(m4Active, enigma).setVisible(true));

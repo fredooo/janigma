@@ -22,3 +22,7 @@ Implementation of a text-based console interface and direct file encyption and d
 #### Build and run:
 
 To build this project Apache Maven is required. Simply run `mvn clean package` in the root directory of the project. The file *janigma-X.X.X-SNAPSHOT-jar-with-dependencies.jar* in the target directory is runnable (double-click or launch with `java -jar [file]`).
+
+#### Examples
+
+Some example configurations of the Enigma M3 and M4 are located in the data directory. The corresponding inputs can be found in the test code.
