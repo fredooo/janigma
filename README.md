@@ -26,3 +26,10 @@ To build this project Apache Maven is required. Simply run `mvn clean package` i
 #### Examples
 
 Some example configurations of the Enigma M3 and M4 are located in the data directory. The corresponding inputs can be found in the test code.
+
+#### Screenshots
+
+![Main Window](https://raw.githubusercontent.com/fredooo/janigma/master/pics/main.png)
+
+![Configuration Dialog](https://raw.githubusercontent.com/fredooo/janigma/master/pics/config.png)
+
