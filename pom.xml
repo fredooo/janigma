@@ -51,9 +51,9 @@
           <aggregate>true</aggregate>
           <instrumentation>
             <excludes>
-              <exclude>de/fredooo/janigma/*.class</exclude>
-              <exclude>de/fredooo/janigma/ui/console/*.class</exclude>
-              <exclude>de/fredooo/janigma/ui/graphical/*.class</exclude>
+              <exclude>com/github/fredooo/janigma/*.class</exclude>
+              <exclude>com/github/fredooo/janigma/ui/console/*.class</exclude>
+              <exclude>com/github/fredooo/janigma/ui/graphical/*.class</exclude>
             </excludes>
           </instrumentation>
         </configuration>
