@@ -14,7 +14,6 @@ import com.github.fredooo.janigma.core.symbols.NoSuchSymbolException;
 import com.github.fredooo.janigma.core.symbols.Original;
 import com.github.fredooo.janigma.core.machine.Enigma;
 import com.github.fredooo.janigma.core.machine.Rotor;
-import javafx.util.Pair;
 
 /**
  * Provides the "Configuration" dialog.
@@ -451,5 +450,33 @@ public class ConfigDialog extends JDialog {
     public static void showDialog(final boolean m4Active, final Enigma enigma) {
 		SwingUtilities.invokeLater(() -> new ConfigDialog(m4Active, enigma).setVisible(true));
 	}
+
+	private class Pair<K, V> {
+
+        private K key;
+        private V value;
+
+        public Pair(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public K getKey() {
+            return key;
+        }
+
+        public void setKey(K key) {
+            this.key = key;
+        }
+
+        public V getValue() {
+            return value;
+        }
+
+        public void setValue(V value) {
+            this.value = value;
+        }
+
+    }
 	
 }
