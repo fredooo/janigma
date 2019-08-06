@@ -1,15 +1,19 @@
 Janigma (Java Enigma cipher machine)
 ====================================
 
-[![Build Status](https://travis-ci.org/fredooo/janigma.svg?branch=master)](https://travis-ci.org/fredooo/janigma) [![Coverage Status](https://coveralls.io/repos/github/fredooo/Janigma/badge.svg?branch=master)](https://coveralls.io/github/fredooo/Janigma?branch=master)
+[![Build Status](https://travis-ci.org/fredooo/janigma.svg?branch=master)](https://travis-ci.org/fredooo/janigma) [![Coverage Status](https://coveralls.io/repos/github/fredooo/Janigma/badge.svg?branch=master)](https://coveralls.io/github/fredooo/Janigma?branch=master) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-A simulator of the Enigma M3 and M4 electro-mechanical rotor cipher machines from World War II. The Enigma M3 and M4 simulation and a simple GUI are implemented, but unverified and untested.
+A simulator of the Enigma M3 and M4 electro-mechanical rotor cipher machines from World War II.
 
-![Screenshots](https://raw.githubusercontent.com/fredooo/janigma/master/pics/screenshots.png)
+![Screenshots](https://raw.githubusercontent.com/fredooo/janigma/master/img/screenshots.png)
 
-#### Current task:
+#### Build and run:
 
-Implementation of a text-based console interface and direct file encyption and decryption.
+To build this project Apache Maven is required. Simply run `mvn clean package` in the root directory of the project. The file `janigma-X.X.X-SNAPSHOT-jar-with-dependencies.jar` in the target directory is runnable (double-click or launch with `java -jar [file]`).
+
+#### Examples
+
+This implementation is tested with original messages. Some example configurations of the Enigma M3 and M4 are located in the `data` directory. The corresponding inputs can be found in the test code.
 
 #### Goals:
 
@@ -21,10 +25,7 @@ Implementation of a text-based console interface and direct file encyption and d
 - [ ] Custom character rotors and reflectors
 - [ ] Simple text-based console interface
 
-#### Build and run:
+#### Current task:
 
-To build this project Apache Maven is required. Simply run `mvn clean package` in the root directory of the project. The file *janigma-X.X.X-SNAPSHOT-jar-with-dependencies.jar* in the target directory is runnable (double-click or launch with `java -jar [file]`).
+Implementation of a text-based console interface and direct file encyption and decryption.
 
-#### Examples
-
-Some example configurations of the Enigma M3 and M4 are located in the data directory. The corresponding inputs can be found in the test code.
