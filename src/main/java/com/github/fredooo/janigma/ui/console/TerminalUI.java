@@ -7,17 +7,19 @@ import com.github.fredooo.janigma.core.machine.EnigmaM3;
 import com.github.fredooo.janigma.core.machine.EnigmaM4;
 import com.github.fredooo.janigma.core.symbols.NoSuchSymbolException;
 import com.github.fredooo.janigma.core.symbols.Original;
-import com.googlecode.lanterna.TerminalFacade;
-import com.googlecode.lanterna.input.Key;
+import com.googlecode.lanterna.TextColor;
+import com.googlecode.lanterna.graphics.TextGraphics;
+import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.screen.Screen;
+import com.googlecode.lanterna.screen.TerminalScreen;
+import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
-import com.googlecode.lanterna.terminal.Terminal.Color;
 
 /**
  * Provides the console based UI of the application.
  * @author Frederik Dennig
  * @since 2013-02-21
- * @version 0.0.1 (last revised 2016-02-25)
+ * @version 0.0.6
  */
 public class TerminalUI {
 	
@@ -43,10 +45,15 @@ public class TerminalUI {
 	 */
 	public TerminalUI() {
 		this.enigma = new EnigmaM3();
-		
-		Terminal terminal = TerminalFacade.createUnixTerminal();
-		this.screen = TerminalFacade.createScreen(terminal);
-		
+
+		try {
+			DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory();
+			Terminal terminal = terminalFactory.createTerminal();
+			this.screen = new TerminalScreen(terminal);
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to create terminal", e);
+		}
+
 		this.running = true;
 		this.inputText = "";
 		this.outputText = "";
@@ -57,21 +64,25 @@ public class TerminalUI {
 	 * Starts the console based UI.
 	 */
 	public void run() {
-		screen.startScreen();
-		updateScreen();
-		while (running) {
-			Key key = screen.readInput();
-			if (key != null) {
-				char c = key.getCharacter();
-				if (config) {
-					configKeyAction(c);
-				} else {
-					mainViewKeyAction(c);
+		try {
+			screen.startScreen();
+			updateScreen();
+			while (running) {
+				KeyStroke key = screen.readInput();
+				if (key != null && key.getCharacter() != null) {
+					char c = key.getCharacter();
+					if (config) {
+						configKeyAction(c);
+					} else {
+						mainViewKeyAction(c);
+					}
+					updateScreen();
 				}
-				updateScreen();
 			}
+			screen.stopScreen();
+		} catch (Exception e) {
+			throw new RuntimeException("Terminal error", e);
 		}
-		screen.stopScreen();
 	}
 
 	/**
@@ -139,7 +150,7 @@ public class TerminalUI {
 		}
 	}
 	
-	private void updateScreen() {
+	private void updateScreen() throws java.io.IOException {
 		screen.clear();
 		if (config) {
 			showConfig();
@@ -150,73 +161,94 @@ public class TerminalUI {
 	}
 	
 	private void showMainView() {
-		screen.putString(1, 0, "[1] Configuration [2] Clear [3] Exit", Color.WHITE, Color.BLACK);
+		TextGraphics tg = screen.newTextGraphics();
+		tg.setForegroundColor(TextColor.ANSI.WHITE);
+		tg.setBackgroundColor(TextColor.ANSI.BLACK);
+
+		tg.putString(1, 0, "[1] Configuration [2] Clear [3] Exit");
 		drawMachineBorders();
-		screen.putString(3, 2, enigma.toString(), Color.WHITE, Color.BLACK);
+		tg.putString(3, 2, enigma.toString());
 		if (m4Active) {
 			showM4MainView();
 		} else {
 			showM3MainView();
 		}
-		
+
 		printSymbols(8, outputChar);
 		printSymbols(12, inputChar);
-		
-		screen.putString(26, 2, "Input:", Color.WHITE, Color.BLACK);
-		screen.putString(26, 9, "Output:", Color.WHITE, Color.BLACK);
-		
+
+		tg.putString(26, 2, "Input:");
+		tg.putString(26, 9, "Output:");
+
 		String[] formattedInput = formatInputOutput(inputText);
 		String[] formattedOutput = formatInputOutput(outputText);
 		for (int i = 0; i < formattedInput.length; i++) {
-			screen.putString(26, 3 + i, formattedInput[i], Color.WHITE, Color.BLACK);
-			screen.putString(26, 10 + i, formattedOutput[i], Color.WHITE, Color.BLACK);
-		}		
+			tg.putString(26, 3 + i, formattedInput[i]);
+			tg.putString(26, 10 + i, formattedOutput[i]);
+		}
 	}
 	
 	private void drawMachineBorders() {
+		TextGraphics tg = screen.newTextGraphics();
+		tg.setForegroundColor(TextColor.ANSI.WHITE);
+		tg.setBackgroundColor(TextColor.ANSI.BLACK);
+
 		for (int i = 2; i < 15; i++) {
-			screen.putString(1, i, "|", Color.WHITE, Color.BLACK);
-			screen.putString(24, i, "|", Color.WHITE, Color.BLACK);
+			tg.putString(1, i, "|");
+			tg.putString(24, i, "|");
 		}
-		screen.putString(1, 1, "+----------------------+", Color.WHITE, Color.BLACK);
-		screen.putString(1, 7, "+----------------------+", Color.WHITE, Color.BLACK);
-		screen.putString(1, 11, "+----------------------+", Color.WHITE, Color.BLACK);
-		screen.putString(1, 15, "+----------------------+", Color.WHITE, Color.BLACK);
+		tg.putString(1, 1, "+----------------------+");
+		tg.putString(1, 7, "+----------------------+");
+		tg.putString(1, 11, "+----------------------+");
+		tg.putString(1, 15, "+----------------------+");
 	}
 	
 	private void printSymbols(int line, char active) {
+		TextGraphics tg = screen.newTextGraphics();
+
 		for (int i = 0; i < 3; i++) {
 			int x = i % 2 == 0 ? 4 : 5;
 			for (char c : SYMBOLS[i]) {
 				if (c == active) {
-					screen.putString(x, line + i, String.valueOf(c), Color.BLACK, Color.WHITE);
+					tg.setForegroundColor(TextColor.ANSI.BLACK);
+					tg.setBackgroundColor(TextColor.ANSI.WHITE);
 				} else {
-					screen.putString(x, line + i, String.valueOf(c), Color.WHITE, Color.BLACK);
+					tg.setForegroundColor(TextColor.ANSI.WHITE);
+					tg.setBackgroundColor(TextColor.ANSI.BLACK);
 				}
+				tg.putString(x, line + i, String.valueOf(c));
 				x += 2;
 			}
 		}
 	}
 	
 	private void showM3MainView() {
+		TextGraphics tg = screen.newTextGraphics();
+		tg.setForegroundColor(TextColor.ANSI.WHITE);
+		tg.setBackgroundColor(TextColor.ANSI.BLACK);
+
 		EnigmaM3 m3 = (EnigmaM3) enigma;
 		char leftRotor = Original.toChar(m3.getLeftRotor().getPosition());
 		char middleRotor = Original.toChar(m3.getMiddleRotor().getPosition());
 		char rightRotor = Original.toChar(m3.getRightRotor().getPosition());
-		screen.putString(8, 4, "+---++---++---+", Color.WHITE, Color.BLACK);
-		screen.putString(8, 5, "| " + leftRotor + " || " + middleRotor + " || " + rightRotor + " |", Color.WHITE, Color.BLACK);
-		screen.putString(8, 6, "+---++---++---+", Color.WHITE, Color.BLACK);
+		tg.putString(8, 4, "+---++---++---+");
+		tg.putString(8, 5, "| " + leftRotor + " || " + middleRotor + " || " + rightRotor + " |");
+		tg.putString(8, 6, "+---++---++---+");
 	}
 	
 	private void showM4MainView() {
+		TextGraphics tg = screen.newTextGraphics();
+		tg.setForegroundColor(TextColor.ANSI.WHITE);
+		tg.setBackgroundColor(TextColor.ANSI.BLACK);
+
 		EnigmaM4 m4 = (EnigmaM4) enigma;
 		char greekRotor = Original.toChar(m4.getGreekRotor().getPosition());
 		char leftRotor = Original.toChar(m4.getLeftRotor().getPosition());
 		char middleRotor = Original.toChar(m4.getMiddleRotor().getPosition());
 		char rightRotor = Original.toChar(m4.getRightRotor().getPosition());
-		screen.putString(3, 4, "+---++---++---++---+", Color.WHITE, Color.BLACK);
-		screen.putString(3, 5, "| " + greekRotor + " || " + leftRotor + " || " + middleRotor + " || " + rightRotor + " |", Color.WHITE, Color.BLACK);
-		screen.putString(3, 6, "+---++---++---++---+", Color.WHITE, Color.BLACK);
+		tg.putString(3, 4, "+---++---++---++---+");
+		tg.putString(3, 5, "| " + greekRotor + " || " + leftRotor + " || " + middleRotor + " || " + rightRotor + " |");
+		tg.putString(3, 6, "+---++---++---++---+");
 	}
 	
 	private void changeEnigmaMachine() {
@@ -245,27 +277,31 @@ public class TerminalUI {
 		return stringBuilder.toString().split("-");
 	}
 	
-	private void showConfig() {		
-		screen.putString(1, 1, "[1] Change Machine", Color.WHITE, Color.BLACK);
-		screen.putString(1, 2, "[2] Set Reflector", Color.WHITE, Color.BLACK);
-		screen.putString(1, 3, "[3] Set Rotor", Color.WHITE, Color.BLACK);
-		screen.putString(1, 4, "[4] Set Rotor Offset", Color.WHITE, Color.BLACK);
-		screen.putString(1, 5, "[5] Add Cable", Color.WHITE, Color.BLACK);
-		screen.putString(1, 6, "[6] Remove Cable", Color.WHITE, Color.BLACK);
-		screen.putString(1, 8, "[7] Close", Color.WHITE, Color.BLACK);
-		
+	private void showConfig() {
+		TextGraphics tg = screen.newTextGraphics();
+		tg.setForegroundColor(TextColor.ANSI.WHITE);
+		tg.setBackgroundColor(TextColor.ANSI.BLACK);
+
+		tg.putString(1, 1, "[1] Change Machine");
+		tg.putString(1, 2, "[2] Set Reflector");
+		tg.putString(1, 3, "[3] Set Rotor");
+		tg.putString(1, 4, "[4] Set Rotor Offset");
+		tg.putString(1, 5, "[5] Add Cable");
+		tg.putString(1, 6, "[6] Remove Cable");
+		tg.putString(1, 8, "[7] Close");
+
 		String reflector = m4Active ? ((EnigmaM4) enigma).getThinReflector().toString() : ((EnigmaM3) enigma).getReflector().toString();
 		String greekRotor = m4Active ? ((EnigmaM4) enigma).getGreekRotor() + " " : "";
-		
+
 		int leftOffset = enigma.getLeftRotor().getOffset() + 1;
 		int middleOffset = enigma.getMiddleRotor().getOffset() + 1;
 		int rightOffset = enigma.getRightRotor().getOffset() + 1;
-		screen.putString(30, 1, "Machine: " + enigma, Color.WHITE, Color.BLACK);
-		screen.putString(30, 2, "Reflector: " + reflector, Color.WHITE, Color.BLACK);
-		screen.putString(30, 3, "Rotors: " + greekRotor + enigma.getLeftRotor() + " " + enigma.getMiddleRotor() + " " + enigma.getRightRotor(), Color.WHITE, Color.BLACK);
-		screen.putString(30, 4, "Offset: " + leftOffset + " " + middleOffset + " " + rightOffset, Color.WHITE, Color.BLACK);
-		screen.putString(30, 5, "Plugboard:", Color.WHITE, Color.BLACK);
-		
+		tg.putString(30, 1, "Machine: " + enigma);
+		tg.putString(30, 2, "Reflector: " + reflector);
+		tg.putString(30, 3, "Rotors: " + greekRotor + enigma.getLeftRotor() + " " + enigma.getMiddleRotor() + " " + enigma.getRightRotor());
+		tg.putString(30, 4, "Offset: " + leftOffset + " " + middleOffset + " " + rightOffset);
+		tg.putString(30, 5, "Plugboard:");
+
 		ArrayList<Integer> noShow = new ArrayList<Integer>();
 		int line = 5;
 		for (int i = 0; i < 26; i++) {
@@ -274,7 +310,7 @@ public class TerminalUI {
 				noShow.add(s);
 				char c1 = Original.toChar(i);
 				char c2 = Original.toChar(enigma.getPlugboard().swappedWith(i));
-				screen.putString(12, line, c1 + " -===- " + c2 , Color.WHITE, Color.BLACK);
+				tg.putString(12, line, c1 + " -===- " + c2);
 				line++;
 			}
 		}

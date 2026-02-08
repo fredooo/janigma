@@ -2,7 +2,7 @@ package com.github.fredooo.janigma.core.machine;
 
 import com.github.fredooo.janigma.core.symbols.NoSuchSymbolException;
 import com.github.fredooo.janigma.core.symbols.Original;
-import junit.framework.Assert;
+import org.junit.Assert;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -12,7 +12,7 @@ import junit.textui.TestRunner;
  * Contains the test cases for the Reflector class. 
  * @author Frederik Dennig
  * @since 2015-09-26
- * @version 0.0.3 (last edited 2016-03-02)
+ * @version 0.0.6
  */
 public class ReflectorTest extends TestCase {
 	
@@ -111,7 +111,7 @@ public class ReflectorTest extends TestCase {
 			Assert.fail("No IllegalArgumentException thrown!");
 		} catch (IllegalArgumentException e) {
 			Assert.assertEquals("Wrong exception message!", "No such reflector!", e.getMessage());
-		}	
+		}
 		try {
 			Reflector.createReflector(5);
 			Assert.fail("No IllegalArgumentException thrown!");
@@ -119,6 +119,43 @@ public class ReflectorTest extends TestCase {
 			Assert.assertEquals("Wrong exception message!", "No such reflector!", e.getMessage());
 
 		}
+	}
+
+	/**
+	 * Tests all reflector variants (M3 B, C and M4 B_thin)
+	 */
+	public void testAllReflectorVariants() {
+		// Test M3 reflector B
+		Reflector refB = Reflector.createReflector(Reflector.M3_B);
+		Assert.assertNotNull("M3_B reflector should not be null!", refB);
+		Assert.assertEquals("M3_B reflector type mismatch!", Reflector.M3_B, refB.type());
+		Assert.assertEquals("M3_B reflector name mismatch!", "B", refB.name());
+
+		// Test M3 reflector C
+		Reflector refC = Reflector.createReflector(Reflector.M3_C);
+		Assert.assertNotNull("M3_C reflector should not be null!", refC);
+		Assert.assertEquals("M3_C reflector type mismatch!", Reflector.M3_C, refC.type());
+		Assert.assertEquals("M3_C reflector name mismatch!", "C", refC.name());
+
+		// Test M4 thin reflector B
+		Reflector refBThin = Reflector.createReflector(Reflector.M4_THIN_B);
+		Assert.assertNotNull("M4_THIN_B reflector should not be null!", refBThin);
+		Assert.assertEquals("M4_THIN_B reflector type mismatch!", Reflector.M4_THIN_B, refBThin.type());
+		Assert.assertEquals("M4_THIN_B reflector name mismatch!", "B", refBThin.name());
+	}
+
+	/**
+	 * Tests reflector equality contract
+	 */
+	public void testEquals() {
+		Reflector ref1 = Reflector.createReflector(Reflector.M3_A);
+		Reflector ref2 = Reflector.createReflector(Reflector.M3_A);
+		Reflector ref3 = Reflector.createReflector(Reflector.M3_B);
+
+		Assert.assertTrue("Same type reflectors should be equal!", ref1.equals(ref2));
+		Assert.assertFalse("Different type reflectors should not be equal!", ref1.equals(ref3));
+		Assert.assertFalse("Null should not equal reflector!", ref1.equals(null));
+		Assert.assertTrue("Reflector should equal itself!", ref1.equals(ref1));
 	}
 	
 	/**

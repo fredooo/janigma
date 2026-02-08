@@ -11,7 +11,7 @@ import com.github.fredooo.janigma.Constants;
  * Provides the "About" dialog.
  * @author Frederik Dennig
  * @since 2013-12-14
- * @version 0.0.2 (last revised 2017-12-01)
+ * @version 0.0.6
  */
 @SuppressWarnings("serial")
 public class AboutDialog extends JDialog {

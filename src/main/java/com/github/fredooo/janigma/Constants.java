@@ -4,7 +4,7 @@ package com.github.fredooo.janigma;
  * Static container of information about this program.
  * @author Frederik Dennig
  * @since 2011-06-01
- * @version 0.0.4 (last revised 2016-03-05)
+ * @version 0.0.6
  */
 public final class Constants {
 	

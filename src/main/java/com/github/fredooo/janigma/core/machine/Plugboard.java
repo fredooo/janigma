@@ -9,7 +9,7 @@ import com.github.fredooo.janigma.core.symbols.Original;
  * Implements the plugboard of an Enigma machine.
  * @author Frederik Dennig
  * @since 2011-06-01
- * @version 0.0.4 (last revised 2016-03-02)
+ * @version 0.0.6
  */
 public class Plugboard {
 
@@ -61,8 +61,8 @@ public class Plugboard {
 	 * @param symbol the character to unplug
 	 */
 	public void removeCable(int symbol) {
-		int othersymbol = plugs[symbol];
-		plugs[othersymbol] = othersymbol;
+		int otherSymbol = plugs[symbol];
+		plugs[otherSymbol] = otherSymbol;
 		plugs[symbol] = symbol;
 	}
 	

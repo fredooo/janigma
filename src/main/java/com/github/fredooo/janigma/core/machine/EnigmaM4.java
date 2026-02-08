@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Implements an Enigma M4.
  * @author Frederik Dennig
  * @since 2011-06-04
- * @version 0.0.4 (last revised 2016-03-02)
+ * @version 0.0.6
  */
 public final class EnigmaM4 extends Enigma {
 	
@@ -38,7 +38,7 @@ public final class EnigmaM4 extends Enigma {
 	}
 	
 	/**
-	 * Sets the greek/leftmost rotor of the this Enigma machine to a given one.
+	 * Sets the greek/leftmost rotor of this Enigma machine to a given one.
 	 * @param rotor a given greek rotor
 	 */
 	public void setGreekRotor(Rotor rotor) {
@@ -54,7 +54,7 @@ public final class EnigmaM4 extends Enigma {
 	}
 
 	/**
-	 * Sets the current thin reflector of the this Enigma machine to a given one.
+	 * Sets the current thin reflector of this Enigma machine to a given one.
 	 * @param thinReflector a given thin reflector
 	 */
 	public void setThinReflector(Reflector thinReflector) {

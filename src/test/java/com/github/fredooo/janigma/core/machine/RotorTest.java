@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import com.github.fredooo.janigma.core.symbols.NoSuchSymbolException;
 import com.github.fredooo.janigma.core.symbols.Original;
-import junit.framework.Assert;
+import org.junit.Assert;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -14,7 +14,7 @@ import junit.textui.TestRunner;
  * Contains the test cases for the Rotor class. 
  * @author Frederik Dennig
  * @since 2015-05-25
- * @version 0.0.2 (last edited 2016-03-02)
+ * @version 0.0.6
  */
 public class RotorTest extends TestCase {
 	
@@ -97,9 +97,9 @@ public class RotorTest extends TestCase {
 			assertEquals("Increment rotor position test failed!", i % 26, rotor.getPosition());
 			rotor.incrementPosition();
 		}
-		rotor.setPostion(1);
+		rotor.setPosition(1);
 		assertEquals("Setting rotor position test failed!", 1, rotor.getPosition());
-		rotor.setPostion(0);
+		rotor.setPosition(0);
 		assertEquals("Setting rotor position test failed!", 0, rotor.getPosition());
 		for (int i = 52; i > 0; i--) {
 			assertEquals("Decrement rotor position test failed!", i % 26, rotor.getPosition());
@@ -146,7 +146,7 @@ public class RotorTest extends TestCase {
 			Assert.fail("No IllegalArgumentException thrown!");
 		} catch (IllegalArgumentException e) {
 			Assert.assertEquals("Wrong exception message!", "No such rotor!", e.getMessage());
-		}	
+		}
 		try {
 			Rotor.createRotor(10);
 			Assert.fail("No IllegalArgumentException thrown!");
@@ -154,6 +154,111 @@ public class RotorTest extends TestCase {
 			Assert.assertEquals("Wrong exception message!", "No such rotor!", e.getMessage());
 
 		}
+	}
+
+	/**
+	 * Tests signal path inverse property: outwardsOutputOf(inwardsOutputOf(x)) == x
+	 */
+	public void testSignalPathInverse() {
+		for (int rotorType = 0; rotorType < 10; rotorType++) {
+			Rotor rotor = Rotor.createRotor(rotorType);
+			for (int position = 0; position < 26; position++) {
+				rotor.setPosition(position);
+				for (int offset = 0; offset < 26; offset++) {
+					rotor.setOffset(offset);
+					for (int input = 0; input < 26; input++) {
+						int inwards = rotor.inwardsOutputOf(input);
+						int outwards = rotor.outwardsOutputOf(inwards);
+						Assert.assertEquals("Signal path not inverse at rotor " + rotorType + " pos " + position + " offset " + offset, input, outwards);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Tests boundary positions (0, 1, 24, 25, wraparound)
+	 */
+	public void testBoundaryPositions() {
+		Rotor rotor = Rotor.createRotor(Rotor.M3_I);
+
+		// Test position 0
+		rotor.setPosition(0);
+		Assert.assertEquals("Position 0 failed!", 0, rotor.getPosition());
+		rotor.decrementPosition();
+		Assert.assertEquals("Decrement from 0 failed!", 25, rotor.getPosition());
+
+		// Test position 1
+		rotor.setPosition(1);
+		Assert.assertEquals("Position 1 failed!", 1, rotor.getPosition());
+		rotor.decrementPosition();
+		Assert.assertEquals("Decrement from 1 failed!", 0, rotor.getPosition());
+
+		// Test position 24
+		rotor.setPosition(24);
+		Assert.assertEquals("Position 24 failed!", 24, rotor.getPosition());
+		rotor.incrementPosition();
+		Assert.assertEquals("Increment from 24 failed!", 25, rotor.getPosition());
+
+		// Test position 25
+		rotor.setPosition(25);
+		Assert.assertEquals("Position 25 failed!", 25, rotor.getPosition());
+		rotor.incrementPosition();
+		Assert.assertEquals("Increment from 25 (wraparound) failed!", 0, rotor.getPosition());
+
+		// Test wraparound in reverse
+		rotor.setPosition(0);
+		rotor.decrementPosition();
+		Assert.assertEquals("Decrement wraparound failed!", 25, rotor.getPosition());
+	}
+
+	/**
+	 * Tests offset interaction with position
+	 */
+	public void testOffsetInteraction() {
+		Rotor rotor = Rotor.createRotor(Rotor.M3_I);
+
+		// Test that different offset affects output for same position/input
+		rotor.setPosition(0);
+		rotor.setOffset(0);
+		int output1 = rotor.inwardsOutputOf(0);
+
+		rotor.setPosition(0);
+		rotor.setOffset(5);
+		int output2 = rotor.inwardsOutputOf(0);
+
+		Assert.assertFalse("Offset should affect output!", output1 == output2);
+
+		// Test that position+offset combination affects signal path
+		rotor.setPosition(10);
+		rotor.setOffset(5);
+		int output3 = rotor.inwardsOutputOf(0);
+
+		rotor.setPosition(5);
+		rotor.setOffset(10);
+		int output4 = rotor.inwardsOutputOf(0);
+
+		// Different pos/offset combos should give different results
+		Assert.assertFalse("Different position/offset combos should differ!", output3 == output4);
+	}
+
+	/**
+	 * Tests rotor equality contract
+	 */
+	public void testEquals() {
+		Rotor rotor1 = Rotor.createRotor(Rotor.M3_I);
+		Rotor rotor2 = Rotor.createRotor(Rotor.M3_I);
+		Rotor rotor3 = Rotor.createRotor(Rotor.M3_II);
+
+		Assert.assertTrue("Same type rotors should be equal!", rotor1.equals(rotor2));
+		Assert.assertFalse("Different type rotors should not be equal!", rotor1.equals(rotor3));
+		Assert.assertFalse("Null should not equal rotor!", rotor1.equals(null));
+		Assert.assertTrue("Rotor should equal itself!", rotor1.equals(rotor1));
+
+		// Note: equality only compares type/name, not position/offset
+		rotor1.setPosition(10);
+		rotor2.setPosition(5);
+		Assert.assertTrue("Position difference should not affect equality!", rotor1.equals(rotor2));
 	}
 	
 	/**

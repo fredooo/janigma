@@ -4,14 +4,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Provides the reflectors of the Enigma M3 and M4 machine.
  * @author Frederik Dennig
  * @since 2011-06-01
- * @version 0.0.4 (last revised 2017-12-02)
+ * @version 0.0.6
  */
 public class Reflector {
 	

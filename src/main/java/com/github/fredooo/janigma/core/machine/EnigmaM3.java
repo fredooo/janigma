@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Implements an Enigma M3.
  * @author Frederik Dennig
  * @since 2011-06-01
- * @version 0.0.4 (last revised 2016-03-02)
+ * @version 0.0.6
  */
 public final class EnigmaM3 extends Enigma {
 	
@@ -33,7 +33,7 @@ public final class EnigmaM3 extends Enigma {
 	}
 	
 	/**
-	 * Sets the reflector of the this Enigma machine to a given one.
+	 * Sets the reflector of this Enigma machine to a given one.
 	 * @param reflector a given reflector
 	 */
 	public void setReflector(Reflector reflector) {

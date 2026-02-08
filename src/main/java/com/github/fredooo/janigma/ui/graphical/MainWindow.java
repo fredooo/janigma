@@ -17,7 +17,7 @@ import com.github.fredooo.janigma.core.symbols.Original;
  * Provides the main window of the application.
  * @author Frederik Dennig
  * @since 2013-12-13
- * @version 0.0.4 (last revised 2017-12-02)
+ * @version 0.0.6
  */
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {

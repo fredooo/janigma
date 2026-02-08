@@ -12,7 +12,7 @@ import com.github.fredooo.janigma.core.symbols.Original;
  * Implements the common functionalities of an Enigma M3 and M4.
  * @author Frederik Dennig
  * @since 2011-11-18
- * @version 0.0.4 (last revised 2016-03-02)
+ * @version 0.0.6
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "machine")
 @JsonSubTypes({ @Type(value = EnigmaM3.class, name = "m3"), @Type(value = EnigmaM4.class, name = "m4") })
@@ -52,7 +52,7 @@ public abstract class Enigma {
 	}
 	
 	/**
-	 * Sets the right rotor of the this Enigma machine to another one.
+	 * Sets the right rotor of this Enigma machine to another one.
 	 * @param rotor a given rotor
 	 */
 	public void setRightRotor(Rotor rotor) {
@@ -68,7 +68,7 @@ public abstract class Enigma {
 	}
 
 	/**
-	 * Sets the middle rotor of the this Enigma machine to a given one.
+	 * Sets the middle rotor of this Enigma machine to a given one.
 	 * @param rotor a given rotor
 	 */
 	public void setMiddleRotor(Rotor rotor) {
@@ -84,7 +84,7 @@ public abstract class Enigma {
 	}
 	
 	/**
-	 * Sets the left rotor of the this Enigma machine to a given one.
+	 * Sets the left rotor of this Enigma machine to a given one.
 	 * @param rotor a given rotor
 	 */
 	public void setLeftRotor(Rotor rotor) {
@@ -109,13 +109,13 @@ public abstract class Enigma {
     			// this is known as "double stepping"
     			middleRotor.incrementPosition();	
     	    	// The middle rotor moves the right rotor, if it is on its transfer
-    	    	// notch postion
+    	    	// notch position
     			leftRotor.incrementPosition();
     			break;
     		}
     	}
     	// The leftmost rotor moves the middle rotor, if it is on its transfer
-    	// notch postion
+    	// notch position
 		for (int i = 0; i < rightRotor.getTransferNotches().length; i++) {
 			if (rightRotor.getPosition() == rightRotor.getTransferNotches()[i]) {
 				middleRotor.incrementPosition();

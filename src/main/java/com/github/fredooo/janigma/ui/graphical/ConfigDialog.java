@@ -19,7 +19,7 @@ import com.github.fredooo.janigma.core.machine.Rotor;
  * Provides the "Configuration" dialog.
  * @author Frederik Dennig
  * @since 2013-12-14
- * @version 0.0.4 (last revised 2017-12-02)
+ * @version 0.0.6
  */
 @SuppressWarnings("serial")
 public class ConfigDialog extends JDialog {
@@ -50,7 +50,7 @@ public class ConfigDialog extends JDialog {
 	private JComboBox<String> offset3List;
 	private JComboBox<String> offset4List;
 
-	private List<Pair<JComboBox<Character>, JComboBox<Character>>> plugboardList;
+	private List<ImmutablePair<JComboBox<Character>, JComboBox<Character>>> plugboardList;
 
     /**
 	 * Creates the "Configuration" dialog.
@@ -62,7 +62,7 @@ public class ConfigDialog extends JDialog {
 		this.m4Active = m4Active;
 		this.lastEnigma = enigma;
         this.currEnigma = enigma;
-		this.plugboardList = new ArrayList<Pair<JComboBox<Character>, JComboBox<Character>>>(NUM_PLUGS);
+		this.plugboardList = new ArrayList<ImmutablePair<JComboBox<Character>, JComboBox<Character>>>(NUM_PLUGS);
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.setResizable(false);
         this.setContentPane(createMainPanel());
@@ -198,7 +198,7 @@ public class ConfigDialog extends JDialog {
         box.add(Box.createHorizontalStrut(3));
         JComboBox<Character> right = createPlugboardDropdown();
         right.setMaximumSize(new Dimension(70, 32));
-        plugboardList.add(new Pair<JComboBox<Character>, JComboBox<Character>>(left, right));
+        plugboardList.add(new ImmutablePair<JComboBox<Character>, JComboBox<Character>>(left, right));
         box.add(right);
         return box;
     }
@@ -292,7 +292,7 @@ public class ConfigDialog extends JDialog {
         int pos = 0;
         for (int l = 0; l < NUM_SYMBOLS; l++) {
             if (enigma.getPlugboard().isPlugged(l) && !alreadyPlugged.contains(l)) {
-                Pair<JComboBox<Character>, JComboBox<Character>> p = plugboardList.get(pos);
+                ImmutablePair<JComboBox<Character>, JComboBox<Character>> p = plugboardList.get(pos);
                 int r = enigma.getPlugboard().swappedWith(l);
                 loadSpecificPlug(p, Original.toChar(l), Original.toChar(r));
                 alreadyPlugged.add(r);
@@ -301,7 +301,7 @@ public class ConfigDialog extends JDialog {
         }
     }
 
-    private void loadSpecificPlug(final Pair<JComboBox<Character>, JComboBox<Character>> p,
+    private void loadSpecificPlug(final ImmutablePair<JComboBox<Character>, JComboBox<Character>> p,
                                   final char l,
                                   final char r) {
         SwingUtilities.invokeLater(() -> {
@@ -311,7 +311,7 @@ public class ConfigDialog extends JDialog {
     }
 
     private void clearPlugboardConfiguration() {
-        for (Pair<JComboBox<Character>, JComboBox<Character>> p : plugboardList) {
+        for (ImmutablePair<JComboBox<Character>, JComboBox<Character>> p : plugboardList) {
             loadSpecificPlug(p, UNSELECTED, UNSELECTED);
         }
     }
@@ -362,7 +362,7 @@ public class ConfigDialog extends JDialog {
 
     private void storePlugboardConfiguration() {
         currEnigma.getPlugboard().removeAllCables();
-        for (Pair<JComboBox<Character>, JComboBox<Character>> p : plugboardList) {
+        for (ImmutablePair<JComboBox<Character>, JComboBox<Character>> p : plugboardList) {
             char l = (char) p.getKey().getSelectedItem();
             char r = (char) p.getValue().getSelectedItem();
             if (l == UNSELECTED && r == UNSELECTED) { continue; }
@@ -388,7 +388,7 @@ public class ConfigDialog extends JDialog {
 
     private boolean validatePlugboard() {
         boolean[] symbols = new boolean[NUM_SYMBOLS];
-        for (Pair<JComboBox<Character>, JComboBox<Character>> p : plugboardList) {
+        for (ImmutablePair<JComboBox<Character>, JComboBox<Character>> p : plugboardList) {
             char l = (char) p.getKey().getSelectedItem();
             char r = (char) p.getValue().getSelectedItem();
             if (l == UNSELECTED && r == UNSELECTED) { continue; }
@@ -451,12 +451,12 @@ public class ConfigDialog extends JDialog {
 		SwingUtilities.invokeLater(() -> new ConfigDialog(m4Active, enigma).setVisible(true));
 	}
 
-	private class Pair<K, V> {
+	private class ImmutablePair<K, V> {
 
         private K key;
         private V value;
 
-        public Pair(K key, V value) {
+        public ImmutablePair(K key, V value) {
             this.key = key;
             this.value = value;
         }
@@ -465,16 +465,8 @@ public class ConfigDialog extends JDialog {
             return key;
         }
 
-        public void setKey(K key) {
-            this.key = key;
-        }
-
         public V getValue() {
             return value;
-        }
-
-        public void setValue(V value) {
-            this.value = value;
         }
 
     }

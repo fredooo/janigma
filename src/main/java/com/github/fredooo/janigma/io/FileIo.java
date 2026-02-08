@@ -23,7 +23,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * Provides simple file input and output actions.
  * @author Frederik Dennig
  * @since 2016-03-01
- * @version 0.0.4 (last revised 2017-12-02)
+ * @version 0.0.6
  */
 public class FileIo {
 
@@ -90,7 +90,7 @@ public class FileIo {
 	 * Reads the content of a text file and returns it as a string.
 	 * @param textFile the path of the text file
 	 * @return the content of the text file or an empty string, if an error
-	 * occurred, in the latter case a error message is printed
+	 * occurred, in the latter case an error message is printed
 	 */
 	private static String readTextFile(File textFile) {
 		String result = "";

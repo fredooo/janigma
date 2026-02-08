@@ -21,11 +21,11 @@ This implementation is tested with original messages. Some example configuration
     * [x] Enigma M3 with rotors I to VIII and reflectors A to C
     * [x] Enigma M4 with greek rotors and thin reflectors B and C
 - [x] Graphical user interface
-- [ ] CLI tool for direct file encyption and decryption
+- [ ] CLI tool for direct file encryption and decryption
 - [ ] Custom character rotors and reflectors
-- [ ] Simple text-based console interface
+- [.] Simple text-based console interface
 
 #### Current task:
 
-Implementation of a text-based console interface and direct file encyption and decryption.
+Implementation of a text-based console interface.
 

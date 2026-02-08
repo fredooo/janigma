@@ -12,3 +12,8 @@ target/
 
 *.iml
 .idea/
+
+
+# VS Code
+
+.vscode/

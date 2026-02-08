@@ -1,6 +1,6 @@
 package com.github.fredooo.janigma.core.symbols;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -10,7 +10,7 @@ import junit.textui.TestRunner;
  * Contains the test cases for the Original class. 
  * @author Frederik Dennig
  * @since 2015-05-28
- * @version 0.0.1 (last edited 2015-09-28)
+ * @version 0.0.6
  */
 public class OriginalTest extends TestCase {
 

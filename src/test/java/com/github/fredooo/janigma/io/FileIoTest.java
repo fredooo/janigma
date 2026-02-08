@@ -8,7 +8,7 @@ import com.github.fredooo.janigma.core.machine.Reflector;
 import com.github.fredooo.janigma.core.symbols.NoSuchSymbolException;
 import com.github.fredooo.janigma.core.machine.Enigma;
 import com.github.fredooo.janigma.core.machine.Rotor;
-import junit.framework.Assert;
+import org.junit.Assert;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -18,7 +18,7 @@ import junit.textui.TestRunner;
  * Contains the test cases for the FileIo class. 
  * @author Frederik Dennig
  * @since 2016-03-02
- * @version 0.0.1 (last edited 2017-12-02)
+ * @version 0.0.6
  */
 public class FileIoTest extends TestCase {
 	
@@ -49,13 +49,13 @@ public class FileIoTest extends TestCase {
 		EnigmaM3 enigma = new EnigmaM3();
 		enigma.setReflector(Reflector.createReflector(Reflector.M3_C));
 		enigma.setLeftRotor(Rotor.createRotor(Rotor.M3_VIII));
-		enigma.getLeftRotor().setPostion(10);
+		enigma.getLeftRotor().setPosition(10);
 		enigma.getLeftRotor().setOffset(8);
 		enigma.setMiddleRotor(Rotor.createRotor(Rotor.M3_V));
-		enigma.getMiddleRotor().setPostion(11);
+		enigma.getMiddleRotor().setPosition(11);
 		enigma.getMiddleRotor().setOffset(9);
 		enigma.setRightRotor(Rotor.createRotor(Rotor.M3_VI));
-		enigma.getRightRotor().setPostion(12);
+		enigma.getRightRotor().setPosition(12);
 		enigma.getRightRotor().setOffset(10);
 		enigma.getPlugboard().addCable('A', 'B');
 		enigma.getPlugboard().addCable('D', 'F');
@@ -77,16 +77,16 @@ public class FileIoTest extends TestCase {
 		EnigmaM4 enigma = new EnigmaM4();
 		enigma.setThinReflector(Reflector.createReflector(Reflector.M4_THIN_C));
 		enigma.setGreekRotor(Rotor.createRotor(Rotor.M4_GREEK_GAMMA));
-		enigma.getGreekRotor().setPostion(20);
+		enigma.getGreekRotor().setPosition(20);
 		enigma.getGreekRotor().setOffset(19);
 		enigma.setLeftRotor(Rotor.createRotor(Rotor.M3_III));
-		enigma.getLeftRotor().setPostion(11);
+		enigma.getLeftRotor().setPosition(11);
 		enigma.getLeftRotor().setOffset(10);
 		enigma.setMiddleRotor(Rotor.createRotor(Rotor.M3_VI));
-		enigma.getMiddleRotor().setPostion(12);
+		enigma.getMiddleRotor().setPosition(12);
 		enigma.getMiddleRotor().setOffset(11);
 		enigma.setRightRotor(Rotor.createRotor(Rotor.M3_II));
-		enigma.getRightRotor().setPostion(13);
+		enigma.getRightRotor().setPosition(13);
 		enigma.getRightRotor().setOffset(12);
 		enigma.getPlugboard().addCable('C', 'F');
 		enigma.getPlugboard().addCable('W', 'V');

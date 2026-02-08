@@ -9,7 +9,7 @@ import com.github.fredooo.janigma.ui.graphical.MainWindow;
  * Contains the main method of the program.
  * @author Frederik Dennig
  * @since 2011-06-01
- * @version 0.0.3 (last revised 2017-12-02)
+ * @version 0.0.6
  */
 public final class Main {
 	

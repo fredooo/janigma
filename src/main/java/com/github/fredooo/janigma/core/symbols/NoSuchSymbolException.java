@@ -4,7 +4,7 @@ package com.github.fredooo.janigma.core.symbols;
  * A special exception thrown, if an unsupported symbol is used.
  * @author Frederik Dennig
  * @since 2011-06-06
- * @version 0.0.3 (last revised 2017-12-01)
+ * @version 0.0.6
  */
 @SuppressWarnings("serial")
 public class NoSuchSymbolException extends Exception {

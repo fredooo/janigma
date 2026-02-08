@@ -7,7 +7,7 @@ import java.util.Arrays;
  * characters and supports lower and upper case letters.
  * @author Frederik Dennig
  * @since 2011-06-09
- * @version 0.0.3 (last revised 2016-02-19)
+ * @version 0.0.6
  */
 public final class Original {
 

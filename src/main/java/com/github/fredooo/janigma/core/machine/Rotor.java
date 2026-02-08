@@ -4,14 +4,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Provides the rotors of an Enigma M3 and M4 machine. 
  * @author Frederik Dennig
  * @since 2011-06-01
- * @version 0.0.4 (last edited 2017-12-02)
+ * @version 0.0.6
  */
 public class Rotor {
 	
@@ -134,7 +131,7 @@ public class Rotor {
 	 * Changes the position of rotor.
 	 * @param position the new position
 	 */
-	public void setPostion(int position) {
+	public void setPosition(int position) {
 		this.position = position;
 	}
 
@@ -261,17 +258,17 @@ public class Rotor {
 	/**
 	 * Creates a rotor with a given type, position and offset.
 	 * @param type the type of the rotor to create
-	 * @param postion the position of the rotor
+	 * @param position the position of the rotor
 	 * @param offset the offset of the rotor
 	 * @return the new rotor with the given configuration
 	 */
 	@JsonCreator
 	public static Rotor createRotor(
 			@JsonProperty("type") int type,
-			@JsonProperty("position") int postion,
+			@JsonProperty("position") int position,
 			@JsonProperty("offset") int offset) {
 		Rotor rotor = createRotor(type);
-		rotor.position = postion;
+		rotor.position = position;
 		rotor.offset = offset;
 		return rotor;
 	}

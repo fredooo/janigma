@@ -1,13 +1,12 @@
 package com.github.fredooo.janigma.ui.graphical;
 
 import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
 
 /**
  * Contains theme related methods.
  * @author Frederik Dennig
  * @since 2016-02-19
- * @version 0.0.2 (last revised 2017-12-01)
+ * @version 0.0.6
  */
 public class Theme {
 	
