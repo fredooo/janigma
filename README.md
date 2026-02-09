@@ -1,8 +1,10 @@
 Janigma (Java Enigma cipher machine)
 ====================================
 
+[![Build](https://github.com/fredooo/janigma/actions/workflows/build.yml/badge.svg)](https://github.com/fredooo/janigma/actions/workflows/build.yml)
 [![Coverage Status](https://coveralls.io/repos/github/fredooo/janigma/badge.svg?branch=master)](https://coveralls.io/github/fredooo/janigma?branch=master)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+![Java](https://img.shields.io/badge/Java-21-blue)
 
 A simulator of the Enigma M3 and M4 electro-mechanical rotor cipher machines from World War II.
 
