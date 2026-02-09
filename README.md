@@ -23,7 +23,7 @@ This implementation is tested with original messages. Some example configuration
 - [x] Graphical user interface
 - [ ] CLI tool for direct file encryption and decryption
 - [ ] Custom character rotors and reflectors
-- [.] Simple text-based console interface
+- [ ] Simple text-based console interface
 
 #### Current task:
 
